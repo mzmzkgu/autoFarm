@@ -19,115 +19,174 @@
   --chart-grid:#ddd4c0;--chart-tick:#a08060;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px 14px 48px;transition:background .3s,color .3s}
-header{max-width:720px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;flex-wrap:wrap;gap:8px}
-header h1{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--green);letter-spacing:.04em}
-header h1 span{color:var(--text-dim);font-weight:400}
-.header-right{display:flex;align-items:center;gap:10px}
-#updated{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim)}
-.theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.72rem;color:var(--text-mid);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;white-space:nowrap}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px 14px 48px;transition:background .3s,color .3s}
+
+/* ── 헤더 한줄 ── */
+header{max-width:720px;margin:0 auto 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.header-logo{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:var(--green);white-space:nowrap;letter-spacing:.04em}
+.header-logo span{color:var(--text-dim);font-weight:400}
+#updated{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:.7rem;color:var(--text-mid);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .theme-btn:hover{border-color:var(--green);color:var(--green)}
+
 .wrap{max-width:720px;margin:0 auto}
 .main-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:3px;transition:background .3s,border .3s}
-.c-label{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;align-items:center}
-.c-badge{font-size:.62rem;padding:1px 7px;border-radius:10px;font-weight:600;text-transform:none;letter-spacing:0}
+
+/* ── 카드 ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px 13px 11px;display:flex;flex-direction:column;gap:3px;transition:background .3s,border .3s}
+.c-label{font-size:.63rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;align-items:center}
+.c-badge{font-size:.6rem;padding:1px 7px;border-radius:10px;font-weight:600;text-transform:none;letter-spacing:0}
 .badge-on-sm{background:var(--green-dim);color:var(--green)}
 .badge-off-sm{background:var(--bg3);color:var(--text-dim)}
 .badge-warn-sm{background:#3a2e00;color:var(--yellow)}
 [data-theme="nature"] .badge-warn-sm{background:#fff3cd;color:#856404}
-.c-val{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.1;margin-top:2px}
-.c-sub{font-size:.72rem;color:var(--text-mid)}
+.c-val{font-family:'JetBrains Mono',monospace;font-size:1.45rem;font-weight:700;color:var(--text);line-height:1.1;margin-top:2px}
+.c-sub{font-size:.71rem;color:var(--text-mid)}
+.c-sub2{font-size:.67rem;color:var(--text-dim);margin-top:1px}
+
+/* 미니 바 */
 .mini-bar-wrap{margin-top:6px}
-.mini-bar-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.mini-bar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.mini-bar-pct{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-dim)}
+.mini-bar-track{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
 .mini-bar-fill{height:100%;border-radius:3px;transition:width .6s ease,background .4s;width:0%}
+
+/* 색상 */
 .c-green{color:var(--green)!important}.c-yellow{color:var(--yellow)!important}.c-red{color:var(--red)!important}.c-dim{color:var(--text-dim)!important}
-.c-status{margin-top:6px;display:flex;align-items:center;gap:6px}
-.c-status-icon{font-size:1.1rem}
+
+/* 상태 카드 */
+.c-status{margin-top:4px;display:flex;align-items:center;gap:5px}
+.c-status-icon{font-size:1rem}
 .c-status-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--text-mid)}
-.err-banner{background:#2a0f0f;border:1px solid #5a1a1a;border-radius:8px;padding:8px 14px;font-size:.75rem;color:var(--red);margin-bottom:10px;display:none;font-family:'JetBrains Mono',monospace}
+
+/* 에러 배너 */
+.err-banner{background:#2a0f0f;border:1px solid #5a1a1a;border-radius:8px;padding:7px 13px;font-size:.73rem;color:var(--red);margin-bottom:10px;display:none;font-family:'JetBrains Mono',monospace}
 [data-theme="nature"] .err-banner{background:#fdecea;border-color:#f5c6cb}
-.chart-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;transition:background .3s,border .3s}
-.chart-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+
+/* 차트 */
+.chart-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:10px;transition:background .3s,border .3s}
+.chart-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
 canvas{width:100%!important}
-.hist-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;transition:background .3s,border .3s}
-.hist-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
-.hist-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
-.hist-toggle{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 10px;cursor:pointer;transition:all .2s}
-.hist-toggle:hover{color:var(--green);border-color:var(--green)}
-.hist-content{display:none;margin-top:12px;overflow-x:auto}
-.hist-content.open{display:block}
-table{width:100%;border-collapse:collapse;font-size:.73rem;font-family:'JetBrains Mono',monospace}
-th{color:var(--text-dim);font-weight:400;text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{color:var(--text-mid);padding:5px 6px;border-bottom:1px solid var(--bg3);white-space:nowrap}
+
+/* 히스토리 */
+.hist-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;transition:background .3s,border .3s}
+.hist-header{display:flex;justify-content:space-between;align-items:center}
+.hist-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
+.hist-btn{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 10px;cursor:pointer;transition:all .2s}
+.hist-btn:hover{color:var(--green);border-color:var(--green)}
+.hist-table-wrap{display:none;margin-top:10px;overflow-x:auto}
+.hist-table-wrap.open{display:block}
+.hist-more-wrap{display:none;margin-top:8px;text-align:center}
+.hist-more-wrap.open{display:block}
+.hist-more-btn{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:3px 14px;cursor:pointer;transition:all .2s}
+.hist-more-btn:hover{color:var(--green);border-color:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:.71rem;font-family:'JetBrains Mono',monospace}
+th{color:var(--text-dim);font-weight:400;text-align:left;padding:4px 5px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{color:var(--text-mid);padding:5px 5px;border-bottom:1px solid var(--bg3);white-space:nowrap}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3)}
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <!-- 헤더 한줄 -->
   <header>
-    <h1>🌱 AUTOFARM <span>MONITOR</span></h1>
-    <div class="header-right">
+    <div class="header-left">
+      <div class="header-logo">🌱 AUTOFARM <span>MONITOR</span></div>
       <div id="updated">로딩 중...</div>
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
     </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
   </header>
+
   <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 잠시 후 재시도합니다</div>
+
+  <!-- 메인 2x2 -->
   <div class="main-grid">
+
+    <!-- 배터리 -->
     <div class="card">
       <div class="c-label">Battery <span class="c-badge badge-off-sm" id="bat-badge">--</span></div>
       <div class="c-val" id="bat-v">--</div>
       <div class="c-sub" id="bat-pct-txt">-- %</div>
-      <div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill" id="bat-fill"></div></div></div>
+      <div class="mini-bar-wrap">
+        <div class="mini-bar-track"><div class="mini-bar-fill" id="bat-fill"></div></div>
+      </div>
     </div>
+
+    <!-- 태양광 -->
     <div class="card">
       <div class="c-label">Solar <span class="c-badge badge-off-sm" id="sol-badge">--</span></div>
       <div class="c-val" id="sol-v">--</div>
       <div class="c-sub" id="sol-eff">효율 -- %</div>
+      <div class="mini-bar-wrap">
+        <div class="mini-bar-track"><div class="mini-bar-fill" id="sol-fill"></div></div>
+      </div>
     </div>
+
+    <!-- 워터펌프 -->
     <div class="card">
-      <div class="c-label">워터펌프</div>
-      <div class="c-status"><span class="c-status-icon">💧</span><span class="c-status-val" id="pump-status">--</span></div>
-      <div class="c-sub" style="margin-top:4px">10:45 ~ 11:30</div>
+      <div class="c-label">워터펌프 <span style="font-size:.58rem;color:var(--text-dim);text-transform:none;letter-spacing:0">(10:45~11:30)</span></div>
+      <div class="c-status">
+        <span class="c-status-icon">💧</span>
+        <span class="c-status-val" id="pump-status">--</span>
+      </div>
     </div>
+
+    <!-- 코인채굴 -->
     <div class="card">
-      <div class="c-label">코인채굴</div>
-      <div class="c-status"><span class="c-status-icon">⛏️</span><span class="c-status-val" id="sub-status">--</span></div>
-      <div class="c-sub" style="margin-top:4px">12:45 ~ 16:00</div>
+      <div class="c-label">코인채굴 <span style="font-size:.58rem;color:var(--text-dim);text-transform:none;letter-spacing:0">(12:45~16:00)</span></div>
+      <div class="c-status">
+        <span class="c-status-icon">⛏️</span>
+        <span class="c-status-val" id="sub-status">--</span>
+      </div>
     </div>
+
   </div>
+
+  <!-- 날씨 + 온타임 -->
   <div class="main-grid" style="margin-bottom:10px">
     <div class="card">
       <div class="c-label">Weather</div>
       <div class="c-val" id="weather" style="font-size:1rem;margin-top:4px">--</div>
-      <div class="c-sub" id="sun-time">-- / --</div>
+      <div class="c-sub2" id="sun-time">--</div>
     </div>
     <div class="card">
       <div class="c-label">Uptime</div>
-      <div class="c-val" id="ontime" style="font-size:0.95rem;margin-top:6px">--</div>
+      <div class="c-val" id="ontime" style="font-size:0.9rem;margin-top:6px">--</div>
     </div>
   </div>
+
+  <!-- 배터리 차트 -->
   <div class="chart-block">
     <div class="chart-title">📈 Battery Voltage — 최근 24h</div>
     <canvas id="batChart" height="110"></canvas>
   </div>
+
+  <!-- 태양광 차트 -->
   <div class="chart-block">
     <div class="chart-title">☀️ Solar Efficiency — 최근 24h</div>
     <canvas id="solChart" height="110"></canvas>
   </div>
+
+  <!-- 히스토리 -->
   <div class="hist-block">
-    <div class="hist-header" onclick="toggleHist()">
+    <div class="hist-header">
       <div class="hist-title">📋 History</div>
-      <div class="hist-toggle" id="hist-btn">▶ SHOW</div>
+      <div class="hist-btn" id="hist-toggle-btn" onclick="toggleHist()">▶ SHOW</div>
     </div>
-    <div class="hist-content" id="hist-content">
+    <div class="hist-table-wrap" id="hist-table-wrap">
       <table>
         <thead><tr><th>시각</th><th>배터리</th><th>태양광</th><th>날씨</th><th>펌프</th><th>채굴</th></tr></thead>
         <tbody id="hist-body"><tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">로딩 중...</td></tr></tbody>
       </table>
+      <div class="hist-more-wrap" id="hist-more-wrap">
+        <button class="hist-more-btn" onclick="showMore()">+ SHOW MORE (최대 48건)</button>
+      </div>
     </div>
   </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -136,17 +195,24 @@ const API_BASE    = "https://kgu3405.tplinkdns.com";
 const API_LATEST  = API_BASE + "/api/autofarm/latest";
 const API_HISTORY = API_BASE + "/api/autofarm/history?limit=48";
 
+let allRows = [];   // 전체 히스토리 캐시
+let histExpanded = false;
+
 function getCV(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
 function timeLabel(ts){return ts?ts.slice(-5):'--'}
 const wMap={'맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓'};
-
 function pctColor(p){return p>=60?'c-green':p>=40?'c-yellow':'c-red'}
 function barColor(p){
   const s=getComputedStyle(document.documentElement);
   return p>=60?s.getPropertyValue('--green').trim():p>=40?s.getPropertyValue('--yellow').trim():s.getPropertyValue('--red').trim();
 }
+function solBarColor(eff){
+  if(eff>=70)return '#ffe066';
+  if(eff>=30)return '#ffb347';
+  return '#5a6a72';
+}
 
-/* ══ 차트 — 먼저 초기화 ══ */
+/* ══ 차트 먼저 초기화 ══ */
 function makeOpts(yMin,yMax,y2Min,y2Max){
   return{
     responsive:true,animation:{duration:300},
@@ -177,7 +243,7 @@ const solChart=new Chart(document.getElementById("solChart"),{
   options:makeOpts(0,7,0,100)
 });
 
-/* ══ 테마 — 차트 초기화 이후에 호출 ══ */
+/* ══ 테마 — 차트 초기화 이후 ══ */
 let currentTheme=localStorage.getItem('af-theme')||'dark';
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t==='nature'?'nature':'');
@@ -186,24 +252,31 @@ function applyTheme(t){
   localStorage.setItem('af-theme',t);
   const isN=t==='nature';
   [batChart,solChart].forEach(c=>{
-    c.options.scales.x.ticks.color =getCV('--chart-tick');
-    c.options.scales.x.grid.color  =getCV('--chart-grid');
-    c.options.scales.y.ticks.color =getCV('--chart-tick');
-    c.options.scales.y.grid.color  =getCV('--chart-grid');
+    c.options.scales.x.ticks.color=getCV('--chart-tick');
+    c.options.scales.x.grid.color=getCV('--chart-grid');
+    c.options.scales.y.ticks.color=getCV('--chart-tick');
+    c.options.scales.y.grid.color=getCV('--chart-grid');
     c.options.scales.y2.ticks.color=getCV('--chart-tick');
     c.options.plugins.tooltip.backgroundColor=isN?'#fff8ee':'#1a2228';
     c.options.plugins.tooltip.titleColor=isN?'#6b5040':'#8fa3ad';
-    c.options.plugins.tooltip.bodyColor =isN?'#3b2e1e':'#cdd6da';
+    c.options.plugins.tooltip.bodyColor=isN?'#3b2e1e':'#cdd6da';
     c.update();
   });
 }
 function toggleTheme(){applyTheme(currentTheme==='nature'?'dark':'nature')}
-applyTheme(currentTheme); // ← 차트 생성 이후 호출
+applyTheme(currentTheme);
 
+/* ══ 히스토리 토글 ══ */
 function toggleHist(){
-  const c=document.getElementById('hist-content');
-  const b=document.getElementById('hist-btn');
-  b.textContent=c.classList.toggle('open')?'▼ HIDE':'▶ SHOW';
+  const wrap=document.getElementById('hist-table-wrap');
+  const btn=document.getElementById('hist-toggle-btn');
+  const open=wrap.classList.toggle('open');
+  btn.textContent=open?'▼ HIDE':'▶ SHOW';
+}
+
+function showMore(){
+  renderTableRows(allRows); // 전체 48건 표시
+  document.getElementById('hist-more-wrap').style.display='none';
 }
 
 /* ══ 렌더 ══ */
@@ -219,21 +292,27 @@ function renderLatest(d){
   bb.textContent=(d.battery_status||'--').trim();
   bb.className='c-badge '+(pct>=60?'badge-on-sm':pct>=40?'badge-warn-sm':'badge-off-sm');
 
+  // 태양광
   const sv=d.solar_v!=null?Number(d.solar_v).toFixed(2):'0.00';
+  const eff=d.solar_efficiency||0;
   document.getElementById("sol-v").textContent=sv+'V';
-  document.getElementById("sol-eff").textContent='효율 '+(d.solar_efficiency||0)+'%';
+  document.getElementById("sol-eff").textContent='효율 '+eff+'%';
+  document.getElementById("sol-fill").style.width=eff+'%';
+  document.getElementById("sol-fill").style.background=solBarColor(eff);
   const sb=document.getElementById("sol-badge");
   const ss=(d.solar_status||'').trim();
-  if(ss==='정상'||ss===''){sb.textContent='충전중'; sb.className='c-badge badge-on-sm';}
-  else if(ss.includes('역류')){sb.textContent='역류'; sb.className='c-badge badge-warn-sm';}
-  else{sb.textContent='충전OFF'; sb.className='c-badge badge-off-sm';}
+  if(ss==='정상'||ss===''){sb.textContent='충전중';sb.className='c-badge badge-on-sm';}
+  else if(ss.includes('역류')){sb.textContent='역류';sb.className='c-badge badge-warn-sm';}
+  else{sb.textContent='충전OFF';sb.className='c-badge badge-off-sm';}
 
+  // 펌프
   const ps=d.pump_status||'';
   const pEl=document.getElementById("pump-status");
   if(ps.includes('완료')){pEl.textContent='완료 ✅';pEl.className='c-status-val c-green';}
   else if(ps.includes('대기')){pEl.textContent='대기중 ⏳';pEl.className='c-status-val c-yellow';}
   else{pEl.textContent='OFF';pEl.className='c-status-val c-dim';}
 
+  // 채굴
   const sEl=document.getElementById("sub-status");
   const ss2=d.sub_esp_status||'';
   if(d.sub_esp_active){sEl.textContent='ON 🟢';sEl.className='c-status-val c-green';}
@@ -241,11 +320,29 @@ function renderLatest(d){
   else if(ss2.includes('날씨')){sEl.textContent='날씨불량';sEl.className='c-status-val c-yellow';}
   else{sEl.textContent='OFF';sEl.className='c-status-val c-dim';}
 
+  // 날씨 — 새 포맷
   document.getElementById("weather").textContent=(wMap[d.weather]||'')+' '+(d.weather||'--');
-  document.getElementById("sun-time").textContent='🌅 '+(d.sunrise||'--')+'   🌇 '+(d.sunset||'--');
+  document.getElementById("sun-time").textContent='🌅 일출 '+(d.sunrise||'--')+' / 🌇 일몰 '+(d.sunset||'--');
+
   document.getElementById("ontime").textContent=d.ontime||'--';
   document.getElementById("updated").textContent='업데이트 '+(d.timestamp||'--');
   document.getElementById("err-banner").style.display='none';
+}
+
+function renderTableRows(rows){
+  const tbody=document.getElementById("hist-body");
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">데이터 없음</td></tr>';
+    return;
+  }
+  tbody.innerHTML=rows.map(r=>{
+    const pct=r.battery_percent||0;
+    const col=pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
+    const sv=r.solar_v!=null?Number(r.solar_v).toFixed(2):'0.00';
+    const pi=(r.pump_status||'').includes('완료')?'✅':(r.pump_status||'').includes('대기')?'⏳':'⚫';
+    const si=r.sub_esp_active?'<span style="color:var(--green)">ON</span>':'<span style="color:var(--text-dim)">OFF</span>';
+    return`<tr><td>${timeLabel(r.timestamp)}</td><td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td><td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td><td>${r.weather||'--'}</td><td>${pi}</td><td>${si}</td></tr>`;
+  }).join('');
 }
 
 function renderHistory(rows){
@@ -259,17 +356,17 @@ function renderHistory(rows){
   solChart.data.datasets[1].data=rev.map(r=>r.solar_efficiency);
   solChart.update();
 
-  const tbody=document.getElementById("hist-body");
-  const slice=rows.slice(0,3);
-  if(!slice.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">데이터 없음</td></tr>';return;}
-  tbody.innerHTML=slice.map(r=>{
-    const pct=r.battery_percent||0;
-    const col=pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
-    const sv=r.solar_v!=null?Number(r.solar_v).toFixed(2):'0.00';
-    const pi=(r.pump_status||'').includes('완료')?'✅':(r.pump_status||'').includes('대기')?'⏳':'⚫';
-    const si=r.sub_esp_active?'<span style="color:var(--green)">ON</span>':'<span style="color:var(--text-dim)">OFF</span>';
-    return`<tr><td>${timeLabel(r.timestamp)}</td><td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td><td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td><td>${r.weather||'--'}</td><td>${pi}</td><td>${si}</td></tr>`;
-  }).join('');
+  allRows=rows;
+  // 기본 3건
+  renderTableRows(rows.slice(0,3));
+  // SHOW MORE 버튼 — 4건 이상일 때만 표시
+  const moreWrap=document.getElementById('hist-more-wrap');
+  if(rows.length>3){
+    moreWrap.classList.add('open');
+    moreWrap.style.display='block';
+  } else {
+    moreWrap.style.display='none';
+  }
 }
 
 /* ══ fetch ══ */
