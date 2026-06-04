@@ -291,9 +291,13 @@ function renderLatest(d){
   bb.textContent=(d.battery_status||'--').trim();
   bb.className='c-badge '+(pct>=60?'badge-on-sm':pct>=40?'badge-warn-sm':'badge-off-sm');
 
-  // 태양광
-  const sv=d.solar_v!=null?Number(d.solar_v).toFixed(2):'0.00';
+  // 태양광 — solar_v가 null/0이면 efficiency로 역산 (SOLAR_MAX_V 6V * eff%)
+  const SOLAR_MAX_V=6.0;
   const eff=d.solar_efficiency||0;
+  const svNum=(d.solar_v!=null&&d.solar_v>0)
+    ?Number(d.solar_v)
+    :(eff>0?SOLAR_MAX_V*eff/100:0);
+  const sv=svNum.toFixed(2);
   document.getElementById("sol-v").textContent=sv+'V';
   document.getElementById("sol-eff").textContent='효율 '+eff+'%';
   document.getElementById("sol-fill").style.width=eff+'%';
@@ -337,7 +341,9 @@ function renderTableRows(rows){
   tbody.innerHTML=rows.map(r=>{
     const pct=r.battery_percent||0;
     const col=pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
-    const sv=r.solar_v!=null?Number(r.solar_v).toFixed(2):'0.00';
+    const _eff=r.solar_efficiency||0;
+    const _sv=(r.solar_v!=null&&r.solar_v>0)?Number(r.solar_v):(_eff>0?6.0*_eff/100:0);
+    const sv=_sv.toFixed(2);
     const pi=(r.pump_status||'').includes('완료')?'✅':(r.pump_status||'').includes('대기')?'⏳':'⚫';
     const si=r.sub_esp_active?'<span style="color:var(--green)">ON</span>':'<span style="color:var(--text-dim)">OFF</span>';
     return`<tr><td>${timeLabel(r.timestamp)}</td><td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td><td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td><td>${r.weather||'--'}</td><td>${pi}</td><td>${si}</td></tr>`;
@@ -351,7 +357,10 @@ function renderHistory(rows){
   batChart.data.datasets[1].data=rev.map(r=>r.battery_percent);
   batChart.update();
   solChart.data.labels=rev.map(r=>timeLabel(r.timestamp));
-  solChart.data.datasets[0].data=rev.map(r=>r.solar_v!=null?r.solar_v:0);
+  solChart.data.datasets[0].data=rev.map(r=>{
+    const e=r.solar_efficiency||0;
+    return (r.solar_v!=null&&r.solar_v>0)?r.solar_v:(e>0?6.0*e/100:0);
+  });
   solChart.data.datasets[1].data=rev.map(r=>r.solar_efficiency);
   solChart.update();
 
