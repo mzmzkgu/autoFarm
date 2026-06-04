@@ -36,7 +36,6 @@
   --chart-grid: #ddd4c0;
   --chart-tick: #a08060;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Noto Sans KR', sans-serif;
@@ -46,8 +45,6 @@ body {
   padding: 20px 14px 48px;
   transition: background 0.3s, color 0.3s;
 }
-
-/* ── 헤더 ── */
 header {
   max-width: 720px;
   margin: 0 auto 20px;
@@ -86,8 +83,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   white-space: nowrap;
 }
 .theme-btn:hover { border-color: var(--green); color: var(--green); }
-
-/* ── 레이아웃 ── */
 .wrap { max-width: 720px; margin: 0 auto; }
 .main-grid {
   display: grid;
@@ -95,8 +90,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   gap: 10px;
   margin-bottom: 10px;
 }
-
-/* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -129,7 +122,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
 .badge-off-sm  { background: var(--bg3); color: var(--text-dim); }
 .badge-warn-sm { background: #3a2e00; color: var(--yellow); }
 [data-theme="nature"] .badge-warn-sm { background: #fff3cd; color: #856404; }
-
 .c-val {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.5rem;
@@ -139,8 +131,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   margin-top: 2px;
 }
 .c-sub { font-size: 0.72rem; color: var(--text-mid); }
-
-/* 배터리 미니 바 */
 .mini-bar-wrap { margin-top: 6px; }
 .mini-bar-track {
   height: 6px;
@@ -154,14 +144,10 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   transition: width 0.6s ease, background 0.4s;
   width: 0%;
 }
-
-/* 색상 유틸 */
 .c-green  { color: var(--green)  !important; }
 .c-yellow { color: var(--yellow) !important; }
 .c-red    { color: var(--red)    !important; }
 .c-dim    { color: var(--text-dim) !important; }
-
-/* 상태 카드 */
 .c-status { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
 .c-status-icon { font-size: 1.1rem; }
 .c-status-val {
@@ -170,8 +156,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   font-weight: 600;
   color: var(--text-mid);
 }
-
-/* ── 에러 배너 ── */
 .err-banner {
   background: #2a0f0f;
   border: 1px solid #5a1a1a;
@@ -184,8 +168,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   font-family: 'JetBrains Mono', monospace;
 }
 [data-theme="nature"] .err-banner { background: #fdecea; border-color: #f5c6cb; }
-
-/* ── 차트 ── */
 .chart-block {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -203,8 +185,6 @@ header h1 span { color: var(--text-dim); font-weight: 400; }
   margin-bottom: 10px;
 }
 canvas { width: 100% !important; }
-
-/* ── 히스토리 ── */
 .hist-block {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -240,7 +220,6 @@ canvas { width: 100% !important; }
 .hist-toggle:hover { color: var(--green); border-color: var(--green); }
 .hist-content { display: none; margin-top: 12px; overflow-x: auto; }
 .hist-content.open { display: block; }
-
 table { width: 100%; border-collapse: collapse; font-size: 0.73rem; font-family: 'JetBrains Mono', monospace; }
 th { color: var(--text-dim); font-weight: 400; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 td { color: var(--text-mid); padding: 5px 6px; border-bottom: 1px solid var(--bg3); white-space: nowrap; }
@@ -250,45 +229,30 @@ tr:hover td { background: var(--bg3); }
 </head>
 <body>
 <div class="wrap">
-
   <header>
     <h1>🌱 AUTOFARM <span>MONITOR</span></h1>
     <div class="header-right">
-      <div id="updated">연결 중...</div>
+      <div id="updated">로딩 중...</div>
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
     </div>
   </header>
 
-  <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 마지막 데이터 표시 중</div>
+  <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 잠시 후 재시도합니다</div>
 
-  <!-- 2x2 메인 그리드 -->
   <div class="main-grid">
-    <!-- 배터리 -->
     <div class="card">
-      <div class="c-label">
-        Battery
-        <span class="c-badge badge-off-sm" id="bat-badge">--</span>
-      </div>
+      <div class="c-label">Battery <span class="c-badge badge-off-sm" id="bat-badge">--</span></div>
       <div class="c-val" id="bat-v">--</div>
       <div class="c-sub" id="bat-pct-txt">-- %</div>
       <div class="mini-bar-wrap">
-        <div class="mini-bar-track">
-          <div class="mini-bar-fill" id="bat-fill"></div>
-        </div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" id="bat-fill"></div></div>
       </div>
     </div>
-
-    <!-- 태양광 -->
     <div class="card">
-      <div class="c-label">
-        Solar
-        <span class="c-badge badge-off-sm" id="sol-badge">--</span>
-      </div>
+      <div class="c-label">Solar <span class="c-badge badge-off-sm" id="sol-badge">--</span></div>
       <div class="c-val" id="sol-v">--</div>
       <div class="c-sub" id="sol-eff">효율 -- %</div>
     </div>
-
-    <!-- 워터펌프 -->
     <div class="card">
       <div class="c-label">워터펌프</div>
       <div class="c-status">
@@ -297,8 +261,6 @@ tr:hover td { background: var(--bg3); }
       </div>
       <div class="c-sub" style="margin-top:4px">10:45 ~ 11:30</div>
     </div>
-
-    <!-- 코인채굴 -->
     <div class="card">
       <div class="c-label">코인채굴</div>
       <div class="c-status">
@@ -309,7 +271,6 @@ tr:hover td { background: var(--bg3); }
     </div>
   </div>
 
-  <!-- 날씨 + 온타임 -->
   <div class="main-grid" style="margin-bottom:10px">
     <div class="card">
       <div class="c-label">Weather</div>
@@ -322,19 +283,15 @@ tr:hover td { background: var(--bg3); }
     </div>
   </div>
 
-  <!-- 배터리 차트 -->
   <div class="chart-block">
     <div class="chart-title">📈 Battery Voltage — 최근 24h</div>
     <canvas id="batChart" height="110"></canvas>
   </div>
-
-  <!-- 태양광 차트 -->
   <div class="chart-block">
     <div class="chart-title">☀️ Solar Efficiency — 최근 24h</div>
     <canvas id="solChart" height="110"></canvas>
   </div>
 
-  <!-- 히스토리 (기본 닫힘) -->
   <div class="hist-block">
     <div class="hist-header" onclick="toggleHist()">
       <div class="hist-title">📋 History</div>
@@ -342,16 +299,13 @@ tr:hover td { background: var(--bg3); }
     </div>
     <div class="hist-content" id="hist-content">
       <table>
-        <thead>
-          <tr><th>시각</th><th>배터리</th><th>태양광</th><th>날씨</th><th>펌프</th><th>채굴</th></tr>
-        </thead>
+        <thead><tr><th>시각</th><th>배터리</th><th>태양광</th><th>날씨</th><th>펌프</th><th>채굴</th></tr></thead>
         <tbody id="hist-body">
           <tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">로딩 중...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -372,14 +326,12 @@ function applyTheme(t) {
 function toggleTheme() { applyTheme(currentTheme === 'nature' ? 'dark' : 'nature'); }
 applyTheme(currentTheme);
 
-/* ══ 히스토리 토글 ══ */
 function toggleHist() {
   const c = document.getElementById('hist-content');
   const b = document.getElementById('hist-btn');
   b.textContent = c.classList.toggle('open') ? '▼ HIDE' : '▶ SHOW';
 }
 
-/* ══ 유틸 ══ */
 function pctColor(pct) {
   if (pct >= 60) return 'c-green';
   if (pct >= 40) return 'c-yellow';
@@ -393,7 +345,7 @@ function barColor(pct) {
 }
 function getCV(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function timeLabel(ts) { return ts ? ts.slice(-5) : '--'; }
-const wMap = { '맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓' };
+const wMap = {'맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓'};
 
 /* ══ 차트 ══ */
 function makeOpts(yMin, yMax, y2Min, y2Max) {
@@ -430,39 +382,33 @@ function makeOpts(yMin, yMax, y2Min, y2Max) {
 
 const batChart = new Chart(document.getElementById("batChart"), {
   type: "line",
-  data: {
-    labels: [],
-    datasets: [
-      { data: [], yAxisID: 'y',  borderColor: '#a0c4ff', backgroundColor: 'rgba(160,196,255,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2, label: 'V' },
-      { data: [], yAxisID: 'y2', borderColor: 'rgba(160,196,255,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3], label: '%' }
-    ]
-  },
+  data: { labels: [], datasets: [
+    { data: [], yAxisID: 'y',  borderColor: '#a0c4ff', backgroundColor: 'rgba(160,196,255,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2 },
+    { data: [], yAxisID: 'y2', borderColor: 'rgba(160,196,255,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3] }
+  ]},
   options: makeOpts(3.3, 4.3, 0, 100)
 });
 
 const solChart = new Chart(document.getElementById("solChart"), {
   type: "line",
-  data: {
-    labels: [],
-    datasets: [
-      { data: [], yAxisID: 'y',  borderColor: '#ffe066', backgroundColor: 'rgba(255,224,102,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2, label: 'V' },
-      { data: [], yAxisID: 'y2', borderColor: 'rgba(255,224,102,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3], label: '%' }
-    ]
-  },
+  data: { labels: [], datasets: [
+    { data: [], yAxisID: 'y',  borderColor: '#ffe066', backgroundColor: 'rgba(255,224,102,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2 },
+    { data: [], yAxisID: 'y2', borderColor: 'rgba(255,224,102,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3] }
+  ]},
   options: makeOpts(0, 7, 0, 100)
 });
 
 function updateChartColors() {
-  const isNature = currentTheme === 'nature';
+  const isN = currentTheme === 'nature';
   [batChart, solChart].forEach(c => {
     c.options.scales.x.ticks.color  = getCV('--chart-tick');
     c.options.scales.x.grid.color   = getCV('--chart-grid');
     c.options.scales.y.ticks.color  = getCV('--chart-tick');
     c.options.scales.y.grid.color   = getCV('--chart-grid');
     c.options.scales.y2.ticks.color = getCV('--chart-tick');
-    c.options.plugins.tooltip.backgroundColor = isNature ? '#fff8ee' : '#1a2228';
-    c.options.plugins.tooltip.titleColor = isNature ? '#6b5040' : '#8fa3ad';
-    c.options.plugins.tooltip.bodyColor  = isNature ? '#3b2e1e' : '#cdd6da';
+    c.options.plugins.tooltip.backgroundColor = isN ? '#fff8ee' : '#1a2228';
+    c.options.plugins.tooltip.titleColor = isN ? '#6b5040' : '#8fa3ad';
+    c.options.plugins.tooltip.bodyColor  = isN ? '#3b2e1e' : '#cdd6da';
     c.update();
   });
 }
@@ -471,56 +417,47 @@ function updateChartColors() {
 function renderLatest(d) {
   const pct = d.battery_percent || 0;
 
-  // 배터리
   const vEl = document.getElementById("bat-v");
-  vEl.textContent = (d.battery_v || '--') + 'V';
+  vEl.textContent = (d.battery_v != null ? d.battery_v : '--') + 'V';
   vEl.className = 'c-val ' + pctColor(pct);
   document.getElementById("bat-pct-txt").textContent = pct + '% · ' + (d.battery_status || '').trim();
   document.getElementById("bat-fill").style.width      = pct + '%';
   document.getElementById("bat-fill").style.background = barColor(pct);
-
   const bb = document.getElementById("bat-badge");
   bb.textContent = (d.battery_status || '--').trim();
   bb.className = 'c-badge ' + (pct >= 60 ? 'badge-on-sm' : pct >= 40 ? 'badge-warn-sm' : 'badge-off-sm');
 
-  // 태양광
-  const sv = (d.solar_v != null) ? Number(d.solar_v).toFixed(2) : '0.00';
-  document.getElementById("sol-v").textContent  = sv + 'V';
+  const sv = d.solar_v != null ? Number(d.solar_v).toFixed(2) : '0.00';
+  document.getElementById("sol-v").textContent   = sv + 'V';
   document.getElementById("sol-eff").textContent = '효율 ' + (d.solar_efficiency || 0) + '%';
-
   const sb = document.getElementById("sol-badge");
-  const ss = d.solar_status || '';
-  if (ss === '정상' || ss === '') { sb.textContent = '충전중';  sb.className = 'c-badge badge-on-sm'; }
-  else if (ss.includes('역류'))   { sb.textContent = '역류';    sb.className = 'c-badge badge-warn-sm'; }
-  else                             { sb.textContent = '충전OFF'; sb.className = 'c-badge badge-off-sm'; }
+  const ss = (d.solar_status || '').trim();
+  if (ss === '정상' || ss === '')  { sb.textContent = '충전중';  sb.className = 'c-badge badge-on-sm'; }
+  else if (ss.includes('역류'))    { sb.textContent = '역류';    sb.className = 'c-badge badge-warn-sm'; }
+  else                              { sb.textContent = '충전OFF'; sb.className = 'c-badge badge-off-sm'; }
 
-  // 워터펌프
   const ps = d.pump_status || '';
   const pumpEl = document.getElementById("pump-status");
   if (ps.includes('완료'))      { pumpEl.textContent = '완료 ✅'; pumpEl.className = 'c-status-val c-green'; }
   else if (ps.includes('대기')) { pumpEl.textContent = '대기중 ⏳'; pumpEl.className = 'c-status-val c-yellow'; }
-  else                          { pumpEl.textContent = 'OFF'; pumpEl.className = 'c-status-val c-dim'; }
+  else                          { pumpEl.textContent = 'OFF';       pumpEl.className = 'c-status-val c-dim'; }
 
-  // 코인채굴
   const subEl = document.getElementById("sub-status");
   const ss2 = d.sub_esp_status || '';
-  if (d.sub_esp_active)             { subEl.textContent = 'ON 🟢';    subEl.className = 'c-status-val c-green'; }
-  else if (ss2.includes('배터리')) { subEl.textContent = '배터리부족'; subEl.className = 'c-status-val c-yellow'; }
-  else if (ss2.includes('날씨'))   { subEl.textContent = '날씨불량';  subEl.className = 'c-status-val c-yellow'; }
-  else                              { subEl.textContent = 'OFF';       subEl.className = 'c-status-val c-dim'; }
+  if (d.sub_esp_active)            { subEl.textContent = 'ON 🟢';     subEl.className = 'c-status-val c-green'; }
+  else if (ss2.includes('배터리')){ subEl.textContent = '배터리부족'; subEl.className = 'c-status-val c-yellow'; }
+  else if (ss2.includes('날씨'))  { subEl.textContent = '날씨불량';   subEl.className = 'c-status-val c-yellow'; }
+  else                             { subEl.textContent = 'OFF';        subEl.className = 'c-status-val c-dim'; }
 
-  // 날씨
   document.getElementById("weather").textContent  = (wMap[d.weather] || '') + ' ' + (d.weather || '--');
   document.getElementById("sun-time").textContent = '🌅 ' + (d.sunrise || '--') + '   🌇 ' + (d.sunset || '--');
-
-  // 온타임
-  document.getElementById("ontime").textContent = d.ontime || '--';
-  document.getElementById("updated").textContent = '업데이트 ' + (d.timestamp || '--');
+  document.getElementById("ontime").textContent   = d.ontime || '--';
+  document.getElementById("updated").textContent  = '업데이트 ' + (d.timestamp || '--');
+  document.getElementById("err-banner").style.display = 'none';
 }
 
 function renderHistory(rows) {
   const rev = [...rows].reverse();
-
   batChart.data.labels = rev.map(r => timeLabel(r.timestamp));
   batChart.data.datasets[0].data = rev.map(r => r.battery_v);
   batChart.data.datasets[1].data = rev.map(r => r.battery_percent);
@@ -531,7 +468,6 @@ function renderHistory(rows) {
   solChart.data.datasets[1].data = rev.map(r => r.solar_efficiency);
   solChart.update();
 
-  // 테이블 최근 3건
   const tbody = document.getElementById("hist-body");
   const slice = rows.slice(0, 3);
   if (!slice.length) {
@@ -542,43 +478,47 @@ function renderHistory(rows) {
     const pct = r.battery_percent || 0;
     const col = pct >= 60 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
     const sv  = r.solar_v != null ? Number(r.solar_v).toFixed(2) : '0.00';
-    const pump = r.pump_status || '';
-    const pi   = pump.includes('완료') ? '✅' : pump.includes('대기') ? '⏳' : '⚫';
-    const si   = r.sub_esp_active
+    const pi  = (r.pump_status||'').includes('완료') ? '✅' : (r.pump_status||'').includes('대기') ? '⏳' : '⚫';
+    const si  = r.sub_esp_active
       ? '<span style="color:var(--green)">ON</span>'
       : '<span style="color:var(--text-dim)">OFF</span>';
     return `<tr>
       <td>${timeLabel(r.timestamp)}</td>
       <td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td>
       <td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td>
-      <td>${r.weather || '--'}</td>
-      <td>${pi}</td>
-      <td>${si}</td>
+      <td>${r.weather||'--'}</td>
+      <td>${pi}</td><td>${si}</td>
     </tr>`;
   }).join('');
 }
 
-/* ══ fetch ══ */
+/* ══ fetch — 404 포함 모든 응답 처리 ══ */
 async function loadLatest() {
   try {
     const res = await fetch(API_LATEST);
-    if (!res.ok) throw new Error(res.status);
-    renderLatest(await res.json());
-    document.getElementById("err-banner").style.display = 'none';
+    const data = await res.json();
+    if (!res.ok) {
+      // 404 = 데이터 없음, 에러 배너 표시하지 않음
+      document.getElementById("updated").textContent = '데이터 없음 — ESP32 대기 중';
+      return;
+    }
+    renderLatest(data);
   } catch(e) {
     console.error("latest 실패:", e);
+    document.getElementById("updated").textContent = '서버 연결 실패';
     document.getElementById("err-banner").style.display = 'block';
   }
 }
+
 async function loadHistory() {
   try {
     const res = await fetch(API_HISTORY);
-    if (!res.ok) throw new Error(res.status);
+    if (!res.ok) return;
     renderHistory(await res.json());
   } catch(e) { console.error("history 실패:", e); }
 }
-async function refresh() { await loadLatest(); await loadHistory(); }
 
+async function refresh() { await loadLatest(); await loadHistory(); }
 refresh();
 setInterval(refresh, 60 * 1000);
 </script>
