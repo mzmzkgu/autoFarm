@@ -3,924 +3,567 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌱 AutoFarm Dashboard</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%236b4226'/%3E%3Ctext x='32' y='25' font-family='monospace' font-weight='700' font-size='17' fill='white' text-anchor='middle' letter-spacing='1'%3EAuto%3C/text%3E%3Ctext x='32' y='43' font-family='monospace' font-weight='700' font-size='17' fill='white' text-anchor='middle' letter-spacing='1'%3EFarm%3C/text%3E%3Ctext x='50' y='57' font-size='14' text-anchor='middle'%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>🌱 오토팜 모니터</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #0b1a0e;
-    --surface:   #122018;
-    --surface2:  #1a2e20;
-    --border:    #2a4a32;
-    --green:     #4ade80;
-    --green-dim: #22543d;
-    --yellow:    #fbbf24;
-    --red:       #f87171;
-    --blue:      #60a5fa;
-    --text:      #d1fae5;
-    --muted:     #6b9c7a;
-    --mono:      'Space Mono', monospace;
-    --sans:      'Noto Sans KR', sans-serif;
+    --bg:        #0a0d0f;
+    --bg2:       #111518;
+    --bg3:       #181d21;
+    --border:    #1f2a2f;
+    --green:     #3ddc84;
+    --green-dim: #1a4d33;
+    --yellow:    #f5c842;
+    --red:       #ff4f4f;
+    --blue:      #4fc3f7;
+    --text:      #cdd6da;
+    --text-dim:  #5a6a72;
+    --text-mid:  #8fa3ad;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
+    font-family: 'Noto Sans KR', sans-serif;
     background: var(--bg);
     color: var(--text);
-    font-family: var(--sans);
     min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* 배경 격자 */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(74,222,128,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74,222,128,.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .wrap {
-    position: relative;
-    z-index: 1;
-    max-width: 720px;
-    margin: 0 auto;
     padding: 24px 16px 48px;
   }
 
-  /* 헤더 */
+  /* ── 헤더 ── */
   header {
+    max-width: 720px;
+    margin: 0 auto 28px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 28px;
-    padding-bottom: 16px;
+    align-items: flex-end;
     border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
   }
-  .logo {
-    font-family: var(--mono);
-    font-size: 1.1rem;
-    letter-spacing: .08em;
+  header h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--green);
+    letter-spacing: 0.04em;
   }
-  .logo span { color: var(--muted); font-size: .75rem; display: block; margin-top: 2px; }
-
-  .status-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: .7rem;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 12px;
-  }
-  .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--muted);
-  }
-  .dot.live { background: var(--green); animation: pulse 2s infinite; }
-  .dot.error { background: var(--red); }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,222,128,.5); }
-    50%      { opacity: .7; box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+  header h1 span { color: var(--text-dim); font-weight: 400; }
+  #updated {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
   }
 
-  /* 날짜/날씨 배너 */
-  .banner {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 20px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .banner-time {
-    font-family: var(--mono);
-    font-size: 1.3rem;
-    color: var(--green);
-    letter-spacing: .04em;
-  }
-  .banner-meta {
-    font-size: .8rem;
-    color: var(--muted);
-    text-align: right;
-    line-height: 1.6;
-  }
+  /* ── 레이아웃 ── */
+  .wrap { max-width: 720px; margin: 0 auto; }
 
-  /* 카드 그리드 */
-  .grid {
+  /* ── 탑 카드 그리드 ── */
+  .top-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
     margin-bottom: 12px;
   }
-  @media(max-width:460px){ .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .top-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 
   .card {
-    background: var(--surface);
+    background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color .2s;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
-  .card:hover { border-color: var(--green-dim); }
-  .card.full { grid-column: 1 / -1; }
-
-  .card-label {
-    font-family: var(--mono);
-    font-size: .65rem;
-    letter-spacing: .12em;
-    color: var(--muted);
+  .card .c-label {
+    font-size: 0.68rem;
+    color: var(--text-dim);
     text-transform: uppercase;
-    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .card-value {
-    font-family: var(--mono);
-    font-size: 1.7rem;
+  .card .c-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.35rem;
     font-weight: 700;
+    color: #fff;
     line-height: 1;
-    margin-bottom: 6px;
   }
-  .card-sub {
-    font-size: .78rem;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  /* 색상 변형 */
-  .val-green  { color: var(--green); }
-  .val-yellow { color: var(--yellow); }
-  .val-red    { color: var(--red); }
-  .val-blue   { color: var(--blue); }
-  .val-muted  { color: var(--muted); }
-
-  /* 배터리 바 */
-  .batt-bar {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 3px;
-    margin-top: 10px;
-    overflow: hidden;
-  }
-  .batt-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--green);
-    transition: width .6s ease, background .4s;
+  .card .c-sub {
+    font-size: 0.72rem;
+    color: var(--text-mid);
+    margin-top: 2px;
   }
 
-  /* 태양광 효율 원형 */
-  .solar-ring {
-    position: absolute;
-    right: 16px; top: 50%;
-    transform: translateY(-50%);
-    width: 60px; height: 60px;
-  }
-  .solar-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring-bg  { fill: none; stroke: var(--surface2); stroke-width: 5; }
-  .ring-fill{ fill: none; stroke: var(--yellow);   stroke-width: 5;
-              stroke-linecap: round;
-              stroke-dasharray: 150;
-              transition: stroke-dashoffset .8s ease; }
+  /* 색상 */
+  .c-green  { color: var(--green)  !important; }
+  .c-yellow { color: var(--yellow) !important; }
+  .c-red    { color: var(--red)    !important; }
+  .c-blue   { color: var(--blue)   !important; }
+  .c-dim    { color: var(--text-dim) !important; }
 
-  /* 상태 배지 */
+  /* ── 상태 바 ── */
+  .status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .s-row {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .s-row .s-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+  }
+  .s-row .s-icon { font-size: 1rem; }
+  .s-row .s-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* ON/OFF 뱃지 */
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: .7rem;
-    font-family: var(--mono);
-    border: 1px solid;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
   }
-  .badge.on  { color: var(--green);  border-color: var(--green-dim);  background: rgba(74,222,128,.08); }
-  .badge.off { color: var(--muted);  border-color: var(--border);     background: transparent; }
-  .badge.warn{ color: var(--yellow); border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.06); }
+  .badge-on  { background: var(--green-dim); color: var(--green); }
+  .badge-off { background: #1a1f23; color: var(--text-dim); }
+  .badge-warn { background: #3a2e00; color: var(--yellow); }
+  .badge::before { content: '●'; font-size: 0.6rem; }
 
-  /* 일출/일몰 바 */
-  .sun-bar-wrap {
-    margin-top: 12px;
-    position: relative;
-  }
-  .sun-track {
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 2px;
-    position: relative;
-  }
-  .sun-range {
-    position: absolute;
-    height: 100%;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--yellow), #f97316);
-    transition: left .6s, width .6s;
-  }
-  .sun-now {
-    position: absolute;
-    top: -4px;
-    width: 12px; height: 12px;
-    background: var(--yellow);
-    border-radius: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 0 8px var(--yellow);
-    transition: left .6s;
-  }
-  .sun-labels {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--mono);
-    font-size: .6rem;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-
-  /* 경고 메시지 */
-  .alert {
-    border: 1px solid rgba(251,191,36,.4);
-    background: rgba(251,191,36,.06);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: .8rem;
-    color: var(--yellow);
+  /* ── 배터리 바 ── */
+  .bat-bar-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
     margin-bottom: 12px;
+  }
+  .bat-bar-label {
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .alert.danger {
-    border-color: rgba(248,113,113,.4);
-    background: rgba(248,113,113,.06);
-    color: var(--red);
-  }
-  #alerts:empty { display: none; }
-
-  /* 온타임 카드 */
-  .ontime-val {
-    font-family: var(--mono);
-    font-size: 1.1rem;
-    color: var(--green);
-  }
-
-  /* 새로고침 버튼 */
-  .refresh-row {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-top: 20px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
   }
-  .refresh-info {
-    font-family: var(--mono);
-    font-size: .65rem;
-    color: var(--muted);
-  }
-  .btn-refresh {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--green);
-    font-family: var(--mono);
-    font-size: .72rem;
-    padding: 6px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: border-color .2s, background .2s;
-  }
-  .btn-refresh:hover { border-color: var(--green); background: rgba(74,222,128,.08); }
-  .btn-refresh:active { transform: scale(.97); }
-
-  /* 스켈레톤 로딩 */
-  .skel {
-    background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
+  .bat-bar-track {
+    height: 8px;
+    background: var(--bg3);
     border-radius: 4px;
-    display: inline-block;
-    height: 1em;
-    width: 80%;
+    overflow: hidden;
   }
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .bat-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease, background 0.4s;
+    width: 0%;
+  }
 
-  /* 원본 메시지 토글 */
-  .raw-toggle {
-    font-family: var(--mono);
-    font-size: .65rem;
-    color: var(--muted);
-    cursor: pointer;
-    border: none;
-    background: none;
-    padding: 4px 0;
-    text-decoration: underline dotted;
-  }
-  .raw-box {
-    background: var(--surface2);
+  /* ── 차트 ── */
+  .chart-block {
+    background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px;
-    font-family: var(--mono);
-    font-size: .72rem;
-    color: var(--muted);
-    white-space: pre-wrap;
-    margin-top: 8px;
-    line-height: 1.6;
-    display: none;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
   }
-  .raw-box.show { display: block; }
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  canvas { width: 100% !important; }
 
-  /* 설정 모달 */
-  .modal-backdrop {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.6);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-backdrop.open { display: flex; }
-  .modal {
-    background: var(--surface);
+  /* ── 히스토리 테이블 ── */
+  .hist-block {
+    background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: min(380px, 92vw);
-    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    border-radius: 12px;
+    padding: 16px;
+    overflow-x: auto;
   }
-  .modal h2 {
-    font-family: var(--mono);
-    font-size: .9rem;
-    color: var(--green);
-    margin-bottom: 20px;
-    letter-spacing: .05em;
+  .hist-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
   }
-  .field { margin-bottom: 14px; }
-  .field label {
-    display: block;
-    font-family: var(--mono);
-    font-size: .65rem;
-    color: var(--muted);
-    letter-spacing: .1em;
-    margin-bottom: 6px;
-  }
-  .field input {
+  table {
     width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: .8rem;
-    padding: 8px 12px;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color .2s;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .field input:focus { border-color: var(--green); }
-  .modal-btns { display: flex; gap: 8px; margin-top: 6px; }
-  .btn-save {
-    flex: 1;
-    background: var(--green);
-    color: var(--bg);
-    border: none;
-    font-family: var(--mono);
-    font-size: .8rem;
-    font-weight: 700;
-    padding: 9px;
-    border-radius: 6px;
-    cursor: pointer;
+  th {
+    color: var(--text-dim);
+    font-weight: 400;
+    text-align: left;
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
   }
-  .btn-cancel {
-    flex: 1;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: .8rem;
-    padding: 9px;
-    border-radius: 6px;
-    cursor: pointer;
+  td {
+    color: var(--text-mid);
+    padding: 5px 8px;
+    border-bottom: 1px solid #151a1d;
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #13191d; }
+
+  /* ── 로딩 ── */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+  .dot-anim::after {
+    content: '';
+    animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    33%  { content: '.'; }
+    66%  { content: '..'; }
+    100% { content: '...'; }
   }
 
-  .cfg-btn {
-    background: none; border: none;
-    color: var(--muted); cursor: pointer;
-    font-size: 1rem; padding: 4px;
-    transition: color .2s;
+  /* ── 에러 배너 ── */
+  .err-banner {
+    background: #2a0f0f;
+    border: 1px solid #5a1a1a;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.78rem;
+    color: var(--red);
+    margin-bottom: 12px;
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .cfg-btn:hover { color: var(--green); }
-
-  /* 마지막 업데이트 fade */
-  .fade-in { animation: fadeIn .4s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
 </style>
 </head>
 <body>
 
 <div class="wrap">
+
   <header>
-    <div class="logo">
-      🌱 AUTOFARM
-      <span>ESP32 Solar Monitor</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="status-pill">
-        <div class="dot" id="statusDot"></div>
-        <span id="statusText">연결 중...</span>
-      </div>
-      <button class="cfg-btn" id="cfgBtn" title="설정">⚙️</button>
-    </div>
+    <h1>🌱 AUTOFARM <span>MONITOR</span></h1>
+    <div id="updated">연결 중...</div>
   </header>
 
-  <!-- 날짜/날씨 배너 -->
-  <div class="banner fade-in" id="banner">
-    <div>
-      <div class="banner-time" id="bannerTime"><span class="skel" style="width:140px"></span></div>
-      <div class="card-sub" id="bannerWeather" style="margin-top:4px"><span class="skel" style="width:100px"></span></div>
+  <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 마지막 데이터를 표시 중입니다</div>
+
+  <!-- 탑 카드 -->
+  <div class="top-grid">
+    <div class="card">
+      <div class="c-label">Battery</div>
+      <div class="c-val" id="bat-v">--</div>
+      <div class="c-sub" id="bat-pct">-- %</div>
     </div>
-    <div class="banner-meta" id="bannerSun"><span class="skel" style="width:90px"></span></div>
-  </div>
-
-  <!-- 경고 -->
-  <div id="alerts"></div>
-
-  <!-- 메인 그리드 -->
-  <div class="grid">
-    <!-- 태양광 -->
-    <div class="card" id="cardSolar">
-      <div class="card-label">☀️ 태양광</div>
-      <div class="card-value val-yellow" id="solarV"><span class="skel"></span></div>
-      <div class="card-sub" id="solarSub"><span class="skel" style="width:70%"></span></div>
-      <div class="solar-ring" id="solarRing">
-        <svg viewBox="0 0 60 60">
-          <circle class="ring-bg"   cx="30" cy="30" r="24"/>
-          <circle class="ring-fill" cx="30" cy="30" r="24" id="ringFill" style="stroke-dashoffset:150"/>
-        </svg>
-      </div>
+    <div class="card">
+      <div class="c-label">Solar</div>
+      <div class="c-val" id="sol-v">--</div>
+      <div class="c-sub" id="sol-eff">효율 -- %</div>
     </div>
-
-    <!-- 배터리 -->
-    <div class="card" id="cardBatt">
-      <div class="card-label">🔋 배터리</div>
-      <div class="card-value" id="battV"><span class="skel"></span></div>
-      <div class="card-sub" id="battSub"><span class="skel" style="width:60%"></span></div>
-      <div class="batt-bar">
-        <div class="batt-fill" id="battFill" style="width:0%"></div>
-      </div>
+    <div class="card">
+      <div class="c-label">Weather</div>
+      <div class="c-val" id="weather" style="font-size:1.1rem">--</div>
+      <div class="c-sub" id="sun-time">-- / --</div>
     </div>
-
-    <!-- 일출/일몰 풀폭 -->
-    <div class="card full" id="cardSun">
-      <div class="card-label">🌅 일출 / 일몰</div>
-      <div style="display:flex;gap:24px;margin-bottom:8px">
-        <div>
-          <div class="card-sub">일출</div>
-          <div class="ontime-val" id="sunriseVal">--:--</div>
-        </div>
-        <div>
-          <div class="card-sub">일몰</div>
-          <div class="ontime-val" id="sunsetVal">--:--</div>
-        </div>
-        <div style="margin-left:auto;text-align:right">
-          <div class="card-sub">현재</div>
-          <div class="ontime-val" id="sunNowVal">--:--</div>
-        </div>
-      </div>
-      <div class="sun-bar-wrap">
-        <div class="sun-track">
-          <div class="sun-range" id="sunRange" style="left:0%;width:60%"></div>
-          <div class="sun-now"   id="sunNow"   style="left:0%"></div>
-        </div>
-        <div class="sun-labels">
-          <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 워터펌프 -->
-    <div class="card" id="cardPump">
-      <div class="card-label">💧 워터펌프</div>
-      <div id="pumpBadge" style="margin-bottom:8px"><span class="skel" style="width:60px;height:18px"></span></div>
-      <div class="card-sub" id="pumpSub"><span class="skel" style="width:80%"></span></div>
-    </div>
-
-    <!-- 서브ESP32 -->
-    <div class="card" id="cardSub">
-      <div class="card-label">📡 서브 ESP32</div>
-      <div id="subBadge" style="margin-bottom:8px"><span class="skel" style="width:60px;height:18px"></span></div>
-      <div class="card-sub" id="subSub"><span class="skel" style="width:80%"></span></div>
-    </div>
-
-    <!-- 온타임 -->
-    <div class="card full">
-      <div class="card-label">⏱ 온타임</div>
-      <div class="ontime-val" id="ontimeVal"><span class="skel" style="width:100px"></span></div>
-      <div class="card-sub" style="margin-top:6px" id="lastFetch">마지막 갱신: —</div>
+    <div class="card">
+      <div class="c-label">Uptime</div>
+      <div class="c-val" id="ontime" style="font-size:0.95rem; padding-top:4px">--</div>
     </div>
   </div>
 
-  <!-- 원본 메시지 -->
-  <div style="margin-bottom:8px">
-    <button class="raw-toggle" id="rawToggle">📋 원본 메시지 보기</button>
-    <div class="raw-box" id="rawBox"></div>
-  </div>
-
-  <!-- 새로고침 -->
-  <div class="refresh-row">
-    <div class="refresh-info" id="nextRefresh">다음 갱신: —</div>
-    <button class="btn-refresh" id="refreshBtn">⟳ 새로고침</button>
-  </div>
-</div>
-
-<!-- 설정 모달 -->
-<div class="modal-backdrop" id="modal">
-  <div class="modal">
-    <h2>⚙️ API 설정</h2>
-    <div class="field">
-      <label>TELEGRAM BOT TOKEN</label>
-      <input type="password" id="cfgToken" placeholder="7374884684:AAF...">
+  <!-- 배터리 바 -->
+  <div class="bat-bar-wrap">
+    <div class="bat-bar-label">
+      <span>BATTERY LEVEL</span>
+      <span id="bat-pct-bar">-- %</span>
     </div>
-    <div class="field">
-      <label>TELEGRAM CHAT ID</label>
-      <input type="text" id="cfgChatId" placeholder="5111593257">
-    </div>
-    <div class="field">
-      <label>자동 갱신 주기 (초)</label>
-      <input type="number" id="cfgInterval" placeholder="120" min="30">
-    </div>
-    <p style="font-size:.68rem;color:var(--muted);margin-bottom:14px;line-height:1.5;">
-      ⚠️ 토큰은 브라우저 localStorage에만 저장돼.<br>
-      GitHub에 올릴 때 하드코딩 하지 마!
-    </p>
-    <div class="modal-btns">
-      <button class="btn-save" id="saveBtn">저장</button>
-      <button class="btn-cancel" id="cancelBtn">취소</button>
+    <div class="bat-bar-track">
+      <div class="bat-bar-fill" id="bat-fill"></div>
     </div>
   </div>
-</div>
 
+  <!-- 상태 리스트 -->
+  <div class="status-list">
+    <div class="s-row">
+      <div class="s-left"><span class="s-icon">💧</span> 워터펌프</div>
+      <div class="s-val" id="pump-status">--</div>
+    </div>
+    <div class="s-row">
+      <div class="s-left"><span class="s-icon">⛏️</span> 코인채굴</div>
+      <div class="s-val" id="sub-status">--</div>
+    </div>
+    <div class="s-row">
+      <div class="s-left"><span class="s-icon">☀️</span> 태양광 상태</div>
+      <div class="s-val" id="sol-status">--</div>
+    </div>
+  </div>
+
+  <!-- 차트 - 배터리 -->
+  <div class="chart-block">
+    <div class="chart-title">📈 Battery Voltage — 최근 24h</div>
+    <canvas id="batChart" height="100"></canvas>
+  </div>
+
+  <!-- 차트 - 태양광 -->
+  <div class="chart-block">
+    <div class="chart-title">☀️ Solar Efficiency — 최근 24h</div>
+    <canvas id="solChart" height="100"></canvas>
+  </div>
+
+  <!-- 히스토리 테이블 -->
+  <div class="hist-block">
+    <div class="hist-title">📋 History</div>
+    <table>
+      <thead>
+        <tr>
+          <th>시각</th>
+          <th>배터리</th>
+          <th>태양광</th>
+          <th>날씨</th>
+          <th>펌프</th>
+          <th>채굴</th>
+        </tr>
+      </thead>
+      <tbody id="hist-body">
+        <tr><td colspan="6" class="loading dot-anim">LOADING</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// ─────────────────────────────────────────────
-//  설정 관리
-// ─────────────────────────────────────────────
-const CFG_KEY = 'autofarm_cfg';
+const API_BASE    = "https://kgu3405.tplinkdns.com";
+const API_LATEST  = API_BASE + "/api/autofarm/latest";
+const API_HISTORY = API_BASE + "/api/autofarm/history?limit=48";
 
-function loadCfg() {
-  try {
-    const s = localStorage.getItem(CFG_KEY);
-    return s ? JSON.parse(s) : {};
-  } catch { return {}; }
-}
-function saveCfg(c) {
-  localStorage.setItem(CFG_KEY, JSON.stringify(c));
-}
-
-let cfg = loadCfg();
-
-// ─────────────────────────────────────────────
-//  모달
-// ─────────────────────────────────────────────
-const modal    = document.getElementById('modal');
-const cfgBtn   = document.getElementById('cfgBtn');
-const cancelBtn= document.getElementById('cancelBtn');
-const saveBtn  = document.getElementById('saveBtn');
-
-cfgBtn.onclick = () => {
-  document.getElementById('cfgToken').value    = cfg.token    || '';
-  document.getElementById('cfgChatId').value   = cfg.chatId   || '';
-  document.getElementById('cfgInterval').value = cfg.interval || 120;
-  modal.classList.add('open');
-};
-cancelBtn.onclick = () => modal.classList.remove('open');
-modal.onclick = e => { if(e.target===modal) modal.classList.remove('open'); };
-
-saveBtn.onclick = () => {
-  cfg.token    = document.getElementById('cfgToken').value.trim();
-  cfg.chatId   = document.getElementById('cfgChatId').value.trim();
-  cfg.interval = parseInt(document.getElementById('cfgInterval').value) || 120;
-  saveCfg(cfg);
-  modal.classList.remove('open');
-  fetchData();
-};
-
-// ─────────────────────────────────────────────
-//  원본 토글
-// ─────────────────────────────────────────────
-document.getElementById('rawToggle').onclick = function() {
-  const box = document.getElementById('rawBox');
-  box.classList.toggle('show');
-  this.textContent = box.classList.contains('show') ? '📋 원본 메시지 숨기기' : '📋 원본 메시지 보기';
-};
-
-// ─────────────────────────────────────────────
-//  파서
-// ─────────────────────────────────────────────
-function parseMessage(text) {
-  const d = {
-    datetime: null,
-    weather: null,
-    sunrise: null, sunriseMin: null,
-    sunset: null,  sunsetMin: null,
-    solarV: null, solarEff: null, solarEmoji: '☀️', solarOff: false,
-    battV: null, battPct: null, battStatus: null,
-    pumpStatus: null, pumpStart: null, pumpEnd: null,
-    subStatus: null, subStart: null, subEnd: null,
-    ontime: null,
-    warnings: []
-  };
-
-  const lines = text.split('\n');
-
-  for (const line of lines) {
-    // ── 헤더: 🌱오토팜 모니터(26.06.02 13:30)
-    const hm = line.match(/오토팜 모니터\((.+?)\)/);
-    if (hm) { d.datetime = hm[1]; continue; }
-
-    // ── 날씨: 날씨@ : 맑음 (출 5:23 / 몰 19:45)
-    const wm = line.match(/날씨.?\s*:\s*(.+?)\s*\(출\s*(\d+):(\d+)\s*\/\s*몰\s*(\d+):(\d+)\)/);
-    if (wm) {
-      d.weather    = wm[1].trim();
-      d.sunrise    = parseInt(wm[2]);
-      d.sunriseMin = parseInt(wm[3]);
-      d.sunset     = parseInt(wm[4]);
-      d.sunsetMin  = parseInt(wm[5]);
-      continue;
-    }
-
-    // ── 태양광: 태양광 : 5.12V / 효율 85% ☀️
-    //            태양광 : 0.00V / 효율 0% 🌙 (충전 OFF)
-    //            태양광 : 0V / 효율 0% (역류↩️)
-    const sm = line.match(/태양광\s*:\s*([\d.]+)V\s*\/\s*효율\s*(\d+)%\s*([^\s(]*)?\s*(\((.+?)\))?/);
-    if (sm) {
-      d.solarV   = parseFloat(sm[1]);
-      d.solarEff = parseInt(sm[2]);
-      d.solarEmoji = sm[3] ? sm[3].trim() : '';
-      d.solarOff = line.includes('충전 OFF') || line.includes('역류');
-      continue;
-    }
-
-    // ── 배터리: 배터리 : 3.95V / 충전 75% (보통 🔋)
-    const bm = line.match(/배터리\s*:\s*([\d.]+)V\s*\/\s*충전\s*(\d+)%\s*\((.+?)\)/);
-    if (bm) {
-      d.battV      = parseFloat(bm[1]);
-      d.battPct    = parseInt(bm[2]);
-      d.battStatus = bm[3].trim();
-      continue;
-    }
-
-    // ── 워터펌프: 워터펌프 : OFF ⚫ (11:00~11:30)
-    const pm = line.match(/워터펌프\s*:\s*(.+?)\s*\((\d+:\d+)~(\d+:\d+)\)/);
-    if (pm) {
-      d.pumpStatus = pm[1].trim();
-      d.pumpStart  = pm[2];
-      d.pumpEnd    = pm[3];
-      continue;
-    }
-
-    // ── 서브ESP: 서브ESP  : OFF ⚫ (13~16시)
-    const em = line.match(/서브ESP\s*:\s*(.+?)\s*\((\d+)~(\d+)시\)/);
-    if (em) {
-      d.subStatus = em[1].trim();
-      d.subStart  = em[2];
-      d.subEnd    = em[3];
-      continue;
-    }
-
-    // ── 온타임
-    const om = line.match(/온타임\s*:\s*(.+)/);
-    if (om) { d.ontime = om[1].trim(); continue; }
-
-    // ── 경고
-    if (line.includes('⚠️') || line.includes('❌')) {
-      d.warnings.push(line.trim());
+// ── 차트 초기화 ──
+const chartOpts = (yMin, yMax, color) => ({
+  responsive: true,
+  animation: { duration: 400 },
+  plugins: { legend: { display: false }, tooltip: {
+    backgroundColor: '#1a2228',
+    borderColor: '#2a3540',
+    borderWidth: 1,
+    titleColor: '#8fa3ad',
+    bodyColor: '#cdd6da',
+    titleFont: { family: 'JetBrains Mono' },
+    bodyFont:  { family: 'JetBrains Mono' },
+  }},
+  scales: {
+    x: {
+      ticks: { color: '#3a4f58', maxTicksLimit: 8, font: { family: 'JetBrains Mono', size: 10 } },
+      grid:  { color: '#13191d' }
+    },
+    y: {
+      min: yMin, max: yMax,
+      ticks: { color: '#5a7080', font: { family: 'JetBrains Mono', size: 10 } },
+      grid:  { color: '#13191d' }
     }
   }
-  return d;
+});
+
+const mkDataset = (color) => ({
+  data: [],
+  borderColor: color,
+  backgroundColor: color + '18',
+  tension: 0.35,
+  fill: true,
+  pointRadius: 2,
+  pointHoverRadius: 4,
+  borderWidth: 1.8
+});
+
+const batChart = new Chart(document.getElementById("batChart"), {
+  type: "line",
+  data: { labels: [], datasets: [mkDataset("var(--green, #3ddc84)")] },
+  options: chartOpts(3.3, 4.3, "#3ddc84")
+});
+const solChart = new Chart(document.getElementById("solChart"), {
+  type: "line",
+  data: { labels: [], datasets: [mkDataset("var(--yellow, #f5c842)")] },
+  options: chartOpts(0, 100, "#f5c842")
+});
+
+// ── 유틸 ──
+function pctColor(pct) {
+  if (pct >= 60) return "c-green";
+  if (pct >= 40) return "c-yellow";
+  return "c-red";
 }
 
-// ─────────────────────────────────────────────
-//  UI 업데이트
-// ─────────────────────────────────────────────
-function setStatus(state) {
-  const dot  = document.getElementById('statusDot');
-  const txt  = document.getElementById('statusText');
-  dot.className = 'dot ' + (state === 'live' ? 'live' : state === 'error' ? 'error' : '');
-  txt.textContent =
-    state === 'live'  ? '라이브' :
-    state === 'error' ? '오류' : '연결 중...';
+function barColor(pct) {
+  if (pct >= 60) return "#3ddc84";
+  if (pct >= 40) return "#f5c842";
+  return "#ff4f4f";
 }
 
-function battColor(pct) {
-  if (pct >= 60) return 'var(--green)';
-  if (pct >= 40) return 'var(--yellow)';
-  return 'var(--red)';
+function badge(text, type) {
+  return `<span class="badge badge-${type}">${text}</span>`;
 }
 
-function sunPct(h, m) {
-  return Math.min(100, Math.max(0, (h * 60 + m) / (24 * 60) * 100));
+function pumpBadge(status) {
+  if (!status) return badge('--', 'off');
+  if (status.includes('완료')) return badge('완료 ✅', 'on');
+  if (status.includes('대기')) return badge('대기중', 'warn');
+  return badge('OFF', 'off');
 }
 
-function updateUI(d, rawText) {
-  // 배너
-  document.getElementById('bannerTime').textContent =
-    (d.datetime ? '🕐 ' + d.datetime : '—');
-  document.getElementById('bannerWeather').textContent =
-    d.weather ? '🌤️ 날씨: ' + d.weather : '';
-  document.getElementById('bannerSun').innerHTML =
-    (d.sunrise !== null)
-      ? `🌅 ${d.sunrise}:${String(d.sunriseMin).padStart(2,'0')} &nbsp;🌇 ${d.sunset}:${String(d.sunsetMin).padStart(2,'0')}`
-      : '';
+function subBadge(status, active) {
+  if (active) return badge('ON', 'on');
+  if (status && status.includes('배터리')) return badge('배터리부족', 'warn');
+  if (status && status.includes('날씨'))   return badge('날씨불량', 'warn');
+  return badge('OFF', 'off');
+}
+
+function solBadge(status) {
+  if (!status || status === '정상') return badge('충전중', 'on');
+  if (status.includes('역류'))      return badge('역류', 'warn');
+  return badge('충전OFF', 'off');
+}
+
+function timeLabel(ts) {
+  if (!ts) return '--';
+  // "26.06.04 11:00" → "11:00"
+  return ts.slice(-5);
+}
+
+// ── 최신 데이터 렌더 ──
+function renderLatest(d) {
+  // 배터리
+  const pct = d.battery_percent || 0;
+  const vEl = document.getElementById("bat-v");
+  vEl.textContent = (d.battery_v || '--') + 'V';
+  vEl.className   = "c-val " + pctColor(pct);
+  document.getElementById("bat-pct").textContent = pct + '% · ' + (d.battery_status || '');
+  document.getElementById("bat-pct-bar").textContent = pct + '%';
+  const fill = document.getElementById("bat-fill");
+  fill.style.width      = pct + '%';
+  fill.style.background = barColor(pct);
 
   // 태양광
-  if (d.solarOff || d.solarV === null) {
-    document.getElementById('solarV').innerHTML   = '<span class="val-muted">OFF</span>';
-    document.getElementById('solarSub').textContent = '충전 비활성';
-    document.getElementById('ringFill').style.strokeDashoffset = 150;
-  } else {
-    document.getElementById('solarV').innerHTML =
-      `<span class="val-yellow">${d.solarV.toFixed(2)}V</span>`;
-    document.getElementById('solarSub').textContent =
-      `효율 ${d.solarEff}%  ${d.solarEmoji}`;
-    const offset = 150 - (150 * (d.solarEff / 100));
-    document.getElementById('ringFill').style.strokeDashoffset = offset;
-  }
+  document.getElementById("sol-v").textContent   = (d.solar_v || 0) + 'V';
+  document.getElementById("sol-eff").textContent = '효율 ' + (d.solar_efficiency || 0) + '%';
 
-  // 배터리
-  const battC = d.battPct !== null ? battColor(d.battPct) : 'var(--muted)';
-  document.getElementById('battV').innerHTML =
-    d.battV !== null
-      ? `<span style="color:${battC}">${d.battV.toFixed(2)}V</span>`
-      : '<span class="val-muted">—</span>';
-  document.getElementById('battSub').textContent =
-    d.battPct !== null ? `${d.battPct}%  ${d.battStatus || ''}` : '';
-  const fill = document.getElementById('battFill');
-  fill.style.width      = (d.battPct || 0) + '%';
-  fill.style.background = battC;
-
-  // 일출/일몰 바
-  if (d.sunrise !== null) {
-    document.getElementById('sunriseVal').textContent =
-      `${d.sunrise}:${String(d.sunriseMin).padStart(2,'0')}`;
-    document.getElementById('sunsetVal').textContent  =
-      `${d.sunset}:${String(d.sunsetMin).padStart(2,'0')}`;
-
-    const now   = new Date();
-    const nowPct = sunPct(now.getHours(), now.getMinutes());
-    const riPct  = sunPct(d.sunrise, d.sunriseMin);
-    const setPct = sunPct(d.sunset,  d.sunsetMin);
-
-    document.getElementById('sunRange').style.left  = riPct  + '%';
-    document.getElementById('sunRange').style.width = (setPct - riPct) + '%';
-    document.getElementById('sunNow').style.left    = nowPct + '%';
-    document.getElementById('sunNowVal').textContent =
-      `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-  }
-
-  // 워터펌프
-  const isPumpOn = d.pumpStatus && d.pumpStatus.includes('ON');
-  const isPumpWait = d.pumpStatus && d.pumpStatus.includes('대기');
-  document.getElementById('pumpBadge').innerHTML =
-    d.pumpStatus
-      ? `<span class="badge ${isPumpOn ? 'on' : isPumpWait ? 'warn' : 'off'}">${d.pumpStatus}</span>`
-      : '';
-  document.getElementById('pumpSub').textContent =
-    d.pumpStart ? `운영 시간: ${d.pumpStart} ~ ${d.pumpEnd}` : '';
-
-  // 서브ESP
-  const isSubOn = d.subStatus && d.subStatus.includes('ON');
-  document.getElementById('subBadge').innerHTML =
-    d.subStatus
-      ? `<span class="badge ${isSubOn ? 'on' : 'off'}">${d.subStatus}</span>`
-      : '';
-  document.getElementById('subSub').textContent =
-    d.subStart ? `운영 시간: ${d.subStart}시 ~ ${d.subEnd}시` : '';
+  // 날씨
+  const wMap = { '맑음':'☀️', '구름많음':'⛅', '흐림':'☁️', '비':'🌧️', '비/눈':'🌨️', '눈':'❄️', '소나기':'🌦️' };
+  document.getElementById("weather").textContent  = (wMap[d.weather] || '') + ' ' + (d.weather || '--');
+  document.getElementById("sun-time").textContent = '🌅' + (d.sunrise || '--') + '  🌇' + (d.sunset || '--');
 
   // 온타임
-  document.getElementById('ontimeVal').textContent = d.ontime || '—';
+  document.getElementById("ontime").textContent = d.ontime || '--';
 
-  // 마지막 갱신
-  const now2 = new Date();
-  document.getElementById('lastFetch').textContent =
-    `마지막 갱신: ${now2.getHours()}:${String(now2.getMinutes()).padStart(2,'0')}:${String(now2.getSeconds()).padStart(2,'0')}`;
+  // 상태 배지
+  document.getElementById("pump-status").innerHTML = pumpBadge(d.pump_status);
+  document.getElementById("sub-status").innerHTML  = subBadge(d.sub_esp_status, d.sub_esp_active);
+  document.getElementById("sol-status").innerHTML  = solBadge(d.solar_status);
 
-  // 경고
-  const alertDiv = document.getElementById('alerts');
-  alertDiv.innerHTML = '';
-  for (const w of d.warnings) {
-    const isDanger = w.includes('긴급') || w.includes('위험') || w.includes('❌');
-    const a = document.createElement('div');
-    a.className = 'alert' + (isDanger ? ' danger' : '');
-    a.textContent = w;
-    alertDiv.appendChild(a);
-  }
-
-  // 원본
-  document.getElementById('rawBox').textContent = rawText;
-
-  // 배너 fade
-  document.getElementById('banner').classList.remove('fade-in');
-  void document.getElementById('banner').offsetWidth;
-  document.getElementById('banner').classList.add('fade-in');
+  // 업데이트 시각
+  document.getElementById("updated").textContent = '업데이트 ' + (d.timestamp || '--');
 }
 
-// ─────────────────────────────────────────────
-//  Telegram API 호출
-// ─────────────────────────────────────────────
-async function fetchData() {
-  const token  = cfg.token;
-  const chatId = cfg.chatId;
+// ── 히스토리 렌더 ──
+function renderHistory(rows) {
+  // 차트용 (오래된 순)
+  const rev = [...rows].reverse();
+  batChart.data.labels           = rev.map(r => timeLabel(r.timestamp));
+  batChart.data.datasets[0].data = rev.map(r => r.battery_v);
+  batChart.update();
 
-  if (!token || !chatId) {
-    setStatus('error');
-    document.getElementById('statusText').textContent = '설정 필요 ⚙️';
-    // 설정 안 됐으면 모달 자동 오픈
-    document.getElementById('cfgToken').value    = '';
-    document.getElementById('cfgChatId').value   = '';
-    document.getElementById('cfgInterval').value = cfg.interval || 120;
-    modal.classList.add('open');
+  solChart.data.labels           = rev.map(r => timeLabel(r.timestamp));
+  solChart.data.datasets[0].data = rev.map(r => r.solar_efficiency);
+  solChart.update();
+
+  // 테이블 (최신 순, 최대 20행)
+  const tbody = document.getElementById("hist-body");
+  const slice = rows.slice(0, 20);
+  if (!slice.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="color:#3a4f58;text-align:center;padding:16px">데이터 없음</td></tr>';
     return;
   }
+  tbody.innerHTML = slice.map(r => {
+    const pct  = r.battery_percent || 0;
+    const col  = pct >= 60 ? '#3ddc84' : pct >= 40 ? '#f5c842' : '#ff4f4f';
+    const pump = r.pump_status || '--';
+    const sub  = r.sub_esp_active ? '<span style="color:#3ddc84">ON</span>' : '<span style="color:#3a4f58">OFF</span>';
+    return `<tr>
+      <td>${timeLabel(r.timestamp)}</td>
+      <td style="color:${col}">${r.battery_v}V <span style="color:#3a4f58">${pct}%</span></td>
+      <td>${r.solar_v}V <span style="color:#3a4f58">${r.solar_efficiency}%</span></td>
+      <td>${r.weather || '--'}</td>
+      <td>${pump.includes('완료') ? '✅' : pump.includes('대기') ? '⏳' : '⚫'}</td>
+      <td>${sub}</td>
+    </tr>`;
+  }).join('');
+}
 
-  setStatus('loading');
-
+// ── fetch ──
+async function loadLatest() {
   try {
-    const url = `https://api.telegram.org/bot${token}/getUpdates?limit=20&allowed_updates=["message"]`;
-    const res  = await fetch(url);
-    const json = await res.json();
-
-    if (!json.ok) throw new Error('Telegram API 오류: ' + json.description);
-
-    // 내 chat_id에서 온 메시지 중 오토팜 포맷인 것만 필터
-    const msgs = json.result
-      .filter(u => u.message && String(u.message.chat.id) === String(chatId) && u.message.text)
-      .map(u => u.message.text);
-
-    // 가장 최신 오토팜 메시지 찾기
-    let found = null;
-    for (let i = msgs.length - 1; i >= 0; i--) {
-      if (msgs[i].includes('오토팜 모니터')) { found = msgs[i]; break; }
-    }
-
-    if (!found) {
-      setStatus('error');
-      document.getElementById('statusText').textContent = '메시지 없음';
-      return;
-    }
-
-    const parsed = parseMessage(found);
-    updateUI(parsed, found);
-    setStatus('live');
-
-  } catch (err) {
-    console.error(err);
-    setStatus('error');
+    const res = await fetch(API_LATEST);
+    if (!res.ok) throw new Error(res.status);
+    const d = await res.json();
+    renderLatest(d);
+    document.getElementById("err-banner").style.display = 'none';
+  } catch(e) {
+    console.error("latest 실패:", e);
+    document.getElementById("err-banner").style.display = 'block';
   }
 }
 
-// ─────────────────────────────────────────────
-//  자동 갱신 타이머
-// ─────────────────────────────────────────────
-let countdown = 0;
-let timer     = null;
-
-function startTimer() {
-  if (timer) clearInterval(timer);
-  countdown = (cfg.interval || 120);
-  timer = setInterval(() => {
-    countdown--;
-    document.getElementById('nextRefresh').textContent =
-      `다음 갱신: ${countdown}초 후`;
-    if (countdown <= 0) {
-      fetchData();
-      countdown = cfg.interval || 120;
-    }
-  }, 1000);
+async function loadHistory() {
+  try {
+    const res = await fetch(API_HISTORY);
+    if (!res.ok) throw new Error(res.status);
+    const rows = await res.json();
+    renderHistory(rows);
+  } catch(e) {
+    console.error("history 실패:", e);
+  }
 }
 
-document.getElementById('refreshBtn').onclick = () => {
-  fetchData();
-  countdown = cfg.interval || 120;
-};
+async function refresh() {
+  await loadLatest();
+  await loadHistory();
+}
 
-// ─────────────────────────────────────────────
-//  초기 실행
-// ─────────────────────────────────────────────
-fetchData();
-startTimer();
+refresh();
+setInterval(refresh, 60 * 1000);
 </script>
 </body>
 </html>
