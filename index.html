@@ -25,8 +25,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 header{max-width:720px;margin:0 auto 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}
 .header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .header-logo{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:var(--green);white-space:nowrap;letter-spacing:.04em}
-.header-logo span{color:var(--text-dim);font-weight:400}
-#updated{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#updated{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:.7rem;color:var(--text-mid);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .theme-btn:hover{border-color:var(--green);color:var(--green)}
 
@@ -94,7 +93,7 @@ tr:hover td{background:var(--bg3)}
   <!-- 헤더 한줄 -->
   <header>
     <div class="header-left">
-      <div class="header-logo">🌱 AUTOFARM <span>MONITOR</span></div>
+      <div class="header-logo">🌱 AUTOFARM</div>
       <div id="updated">로딩 중...</div>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
@@ -325,7 +324,7 @@ function renderLatest(d){
   document.getElementById("sun-time").textContent='🌅 일출 '+(d.sunrise||'--')+' / 🌇 일몰 '+(d.sunset||'--');
 
   document.getElementById("ontime").textContent=d.ontime||'--';
-  document.getElementById("updated").textContent='업데이트 '+(d.timestamp||'--');
+  document.getElementById("updated").textContent=d.timestamp||'--';
   document.getElementById("err-banner").style.display='none';
 }
 
@@ -375,7 +374,7 @@ async function loadLatest(){
     const res=await fetch(API_LATEST);
     const data=await res.json();
     if(!res.ok){
-      document.getElementById("updated").textContent='데이터 없음 — ESP32 대기 중';
+      document.getElementById("updated").textContent='데이터 없음';
       return;
     }
     renderLatest(data);
