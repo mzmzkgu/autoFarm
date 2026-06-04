@@ -6,365 +6,353 @@
 <title>🌱 오토팜 모니터</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:        #0a0d0f;
-    --bg2:       #111518;
-    --bg3:       #181d21;
-    --border:    #1f2a2f;
-    --green:     #3ddc84;
-    --green-dim: #1a4d33;
-    --yellow:    #f5c842;
-    --red:       #ff4f4f;
-    --blue:      #4fc3f7;
-    --text:      #cdd6da;
-    --text-dim:  #5a6a72;
-    --text-mid:  #8fa3ad;
-  }
+:root {
+  --bg:         #0a0d0f;
+  --bg2:        #111518;
+  --bg3:        #181d21;
+  --border:     #1f2a2f;
+  --green:      #3ddc84;
+  --green-dim:  #1a4d33;
+  --yellow:     #f5c842;
+  --red:        #ff4f4f;
+  --text:       #cdd6da;
+  --text-dim:   #5a6a72;
+  --text-mid:   #8fa3ad;
+  --chart-grid: #1e2830;
+  --chart-tick: #4a6070;
+}
+[data-theme="nature"] {
+  --bg:         #f5f0e8;
+  --bg2:        #fffdf7;
+  --bg3:        #ede8dc;
+  --border:     #c8b89a;
+  --green:      #3a7d44;
+  --green-dim:  #c8e6c9;
+  --yellow:     #e6a817;
+  --red:        #c0392b;
+  --text:       #3b2e1e;
+  --text-dim:   #a08060;
+  --text-mid:   #6b5040;
+  --chart-grid: #ddd4c0;
+  --chart-tick: #a08060;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px 14px 48px;
+  transition: background 0.3s, color 0.3s;
+}
 
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 24px 16px 48px;
-  }
+/* ── 헤더 ── */
+header {
+  max-width: 720px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+header h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.04em;
+}
+header h1 span { color: var(--text-dim); font-weight: 400; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+#updated {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+.theme-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  color: var(--text-mid);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.theme-btn:hover { border-color: var(--green); color: var(--green); }
 
-  /* ── 헤더 ── */
-  header {
-    max-width: 720px;
-    margin: 0 auto 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 14px;
-  }
-  header h1 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--green);
-    letter-spacing: 0.04em;
-  }
-  header h1 span { color: var(--text-dim); font-weight: 400; }
-  #updated {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-  }
+/* ── 레이아웃 ── */
+.wrap { max-width: 720px; margin: 0 auto; }
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
 
-  /* ── 레이아웃 ── */
-  .wrap { max-width: 720px; margin: 0 auto; }
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: background 0.3s, border 0.3s;
+}
+.c-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.c-badge {
+  font-size: 0.62rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.badge-on-sm   { background: var(--green-dim); color: var(--green); }
+.badge-off-sm  { background: var(--bg3); color: var(--text-dim); }
+.badge-warn-sm { background: #3a2e00; color: var(--yellow); }
+[data-theme="nature"] .badge-warn-sm { background: #fff3cd; color: #856404; }
 
-  /* ── 탑 카드 그리드 ── */
-  .top-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  @media (max-width: 520px) {
-    .top-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+.c-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.c-sub { font-size: 0.72rem; color: var(--text-mid); }
 
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .card .c-label {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .card .c-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-  }
-  .card .c-sub {
-    font-size: 0.72rem;
-    color: var(--text-mid);
-    margin-top: 2px;
-  }
+/* 배터리 미니 바 */
+.mini-bar-wrap { margin-top: 6px; }
+.mini-bar-track {
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease, background 0.4s;
+  width: 0%;
+}
 
-  /* 색상 */
-  .c-green  { color: var(--green)  !important; }
-  .c-yellow { color: var(--yellow) !important; }
-  .c-red    { color: var(--red)    !important; }
-  .c-blue   { color: var(--blue)   !important; }
-  .c-dim    { color: var(--text-dim) !important; }
+/* 색상 유틸 */
+.c-green  { color: var(--green)  !important; }
+.c-yellow { color: var(--yellow) !important; }
+.c-red    { color: var(--red)    !important; }
+.c-dim    { color: var(--text-dim) !important; }
 
-  /* ── 상태 바 ── */
-  .status-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .s-row {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 11px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .s-row .s-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-    color: var(--text-mid);
-  }
-  .s-row .s-icon { font-size: 1rem; }
-  .s-row .s-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 600;
-  }
+/* 상태 카드 */
+.c-status { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.c-status-icon { font-size: 1.1rem; }
+.c-status-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-mid);
+}
 
-  /* ON/OFF 뱃지 */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-  }
-  .badge-on  { background: var(--green-dim); color: var(--green); }
-  .badge-off { background: #1a1f23; color: var(--text-dim); }
-  .badge-warn { background: #3a2e00; color: var(--yellow); }
-  .badge::before { content: '●'; font-size: 0.6rem; }
+/* ── 에러 배너 ── */
+.err-banner {
+  background: #2a0f0f;
+  border: 1px solid #5a1a1a;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-bottom: 10px;
+  display: none;
+  font-family: 'JetBrains Mono', monospace;
+}
+[data-theme="nature"] .err-banner { background: #fdecea; border-color: #f5c6cb; }
 
-  /* ── 배터리 바 ── */
-  .bat-bar-wrap {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-  }
-  .bat-bar-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 8px;
-  }
-  .bat-bar-track {
-    height: 8px;
-    background: var(--bg3);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .bat-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.6s ease, background 0.4s;
-    width: 0%;
-  }
+/* ── 차트 ── */
+.chart-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: background 0.3s, border 0.3s;
+}
+.chart-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+canvas { width: 100% !important; }
 
-  /* ── 차트 ── */
-  .chart-block {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-  .chart-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-  }
-  canvas { width: 100% !important; }
+/* ── 히스토리 ── */
+.hist-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  transition: background 0.3s, border 0.3s;
+}
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.hist-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.hist-toggle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.hist-toggle:hover { color: var(--green); border-color: var(--green); }
+.hist-content { display: none; margin-top: 12px; overflow-x: auto; }
+.hist-content.open { display: block; }
 
-  /* ── 히스토리 테이블 ── */
-  .hist-block {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    overflow-x: auto;
-  }
-  .hist-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.75rem;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  th {
-    color: var(--text-dim);
-    font-weight: 400;
-    text-align: left;
-    padding: 4px 8px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  td {
-    color: var(--text-mid);
-    padding: 5px 8px;
-    border-bottom: 1px solid #151a1d;
-    white-space: nowrap;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #13191d; }
-
-  /* ── 로딩 ── */
-  .loading {
-    text-align: center;
-    padding: 40px;
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-  }
-  .dot-anim::after {
-    content: '';
-    animation: dots 1.5s infinite;
-  }
-  @keyframes dots {
-    0%   { content: ''; }
-    33%  { content: '.'; }
-    66%  { content: '..'; }
-    100% { content: '...'; }
-  }
-
-  /* ── 에러 배너 ── */
-  .err-banner {
-    background: #2a0f0f;
-    border: 1px solid #5a1a1a;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 0.78rem;
-    color: var(--red);
-    margin-bottom: 12px;
-    display: none;
-    font-family: 'JetBrains Mono', monospace;
-  }
+table { width: 100%; border-collapse: collapse; font-size: 0.73rem; font-family: 'JetBrains Mono', monospace; }
+th { color: var(--text-dim); font-weight: 400; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { color: var(--text-mid); padding: 5px 6px; border-bottom: 1px solid var(--bg3); white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg3); }
 </style>
 </head>
 <body>
-
 <div class="wrap">
 
   <header>
     <h1>🌱 AUTOFARM <span>MONITOR</span></h1>
-    <div id="updated">연결 중...</div>
+    <div class="header-right">
+      <div id="updated">연결 중...</div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
+    </div>
   </header>
 
-  <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 마지막 데이터를 표시 중입니다</div>
+  <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 마지막 데이터 표시 중</div>
 
-  <!-- 탑 카드 -->
-  <div class="top-grid">
+  <!-- 2x2 메인 그리드 -->
+  <div class="main-grid">
+    <!-- 배터리 -->
     <div class="card">
-      <div class="c-label">Battery</div>
+      <div class="c-label">
+        Battery
+        <span class="c-badge badge-off-sm" id="bat-badge">--</span>
+      </div>
       <div class="c-val" id="bat-v">--</div>
-      <div class="c-sub" id="bat-pct">-- %</div>
+      <div class="c-sub" id="bat-pct-txt">-- %</div>
+      <div class="mini-bar-wrap">
+        <div class="mini-bar-track">
+          <div class="mini-bar-fill" id="bat-fill"></div>
+        </div>
+      </div>
     </div>
+
+    <!-- 태양광 -->
     <div class="card">
-      <div class="c-label">Solar</div>
+      <div class="c-label">
+        Solar
+        <span class="c-badge badge-off-sm" id="sol-badge">--</span>
+      </div>
       <div class="c-val" id="sol-v">--</div>
       <div class="c-sub" id="sol-eff">효율 -- %</div>
     </div>
+
+    <!-- 워터펌프 -->
+    <div class="card">
+      <div class="c-label">워터펌프</div>
+      <div class="c-status">
+        <span class="c-status-icon">💧</span>
+        <span class="c-status-val" id="pump-status">--</span>
+      </div>
+      <div class="c-sub" style="margin-top:4px">10:45 ~ 11:30</div>
+    </div>
+
+    <!-- 코인채굴 -->
+    <div class="card">
+      <div class="c-label">코인채굴</div>
+      <div class="c-status">
+        <span class="c-status-icon">⛏️</span>
+        <span class="c-status-val" id="sub-status">--</span>
+      </div>
+      <div class="c-sub" style="margin-top:4px">12:45 ~ 16:00</div>
+    </div>
+  </div>
+
+  <!-- 날씨 + 온타임 -->
+  <div class="main-grid" style="margin-bottom:10px">
     <div class="card">
       <div class="c-label">Weather</div>
-      <div class="c-val" id="weather" style="font-size:1.1rem">--</div>
+      <div class="c-val" id="weather" style="font-size:1rem;margin-top:4px">--</div>
       <div class="c-sub" id="sun-time">-- / --</div>
     </div>
     <div class="card">
       <div class="c-label">Uptime</div>
-      <div class="c-val" id="ontime" style="font-size:0.95rem; padding-top:4px">--</div>
+      <div class="c-val" id="ontime" style="font-size:0.95rem;margin-top:6px">--</div>
     </div>
   </div>
 
-  <!-- 배터리 바 -->
-  <div class="bat-bar-wrap">
-    <div class="bat-bar-label">
-      <span>BATTERY LEVEL</span>
-      <span id="bat-pct-bar">-- %</span>
-    </div>
-    <div class="bat-bar-track">
-      <div class="bat-bar-fill" id="bat-fill"></div>
-    </div>
-  </div>
-
-  <!-- 상태 리스트 -->
-  <div class="status-list">
-    <div class="s-row">
-      <div class="s-left"><span class="s-icon">💧</span> 워터펌프</div>
-      <div class="s-val" id="pump-status">--</div>
-    </div>
-    <div class="s-row">
-      <div class="s-left"><span class="s-icon">⛏️</span> 코인채굴</div>
-      <div class="s-val" id="sub-status">--</div>
-    </div>
-    <div class="s-row">
-      <div class="s-left"><span class="s-icon">☀️</span> 태양광 상태</div>
-      <div class="s-val" id="sol-status">--</div>
-    </div>
-  </div>
-
-  <!-- 차트 - 배터리 -->
+  <!-- 배터리 차트 -->
   <div class="chart-block">
     <div class="chart-title">📈 Battery Voltage — 최근 24h</div>
-    <canvas id="batChart" height="100"></canvas>
+    <canvas id="batChart" height="110"></canvas>
   </div>
 
-  <!-- 차트 - 태양광 -->
+  <!-- 태양광 차트 -->
   <div class="chart-block">
     <div class="chart-title">☀️ Solar Efficiency — 최근 24h</div>
-    <canvas id="solChart" height="100"></canvas>
+    <canvas id="solChart" height="110"></canvas>
   </div>
 
-  <!-- 히스토리 테이블 -->
+  <!-- 히스토리 (기본 닫힘) -->
   <div class="hist-block">
-    <div class="hist-title">📋 History</div>
-    <table>
-      <thead>
-        <tr>
-          <th>시각</th>
-          <th>배터리</th>
-          <th>태양광</th>
-          <th>날씨</th>
-          <th>펌프</th>
-          <th>채굴</th>
-        </tr>
-      </thead>
-      <tbody id="hist-body">
-        <tr><td colspan="6" class="loading dot-anim">LOADING</td></tr>
-      </tbody>
-    </table>
+    <div class="hist-header" onclick="toggleHist()">
+      <div class="hist-title">📋 History</div>
+      <div class="hist-toggle" id="hist-btn">▶ SHOW</div>
+    </div>
+    <div class="hist-content" id="hist-content">
+      <table>
+        <thead>
+          <tr><th>시각</th><th>배터리</th><th>태양광</th><th>날씨</th><th>펌프</th><th>채굴</th></tr>
+        </thead>
+        <tbody id="hist-body">
+          <tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">로딩 중...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-</div><!-- /wrap -->
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -372,195 +360,224 @@ const API_BASE    = "https://kgu3405.tplinkdns.com";
 const API_LATEST  = API_BASE + "/api/autofarm/latest";
 const API_HISTORY = API_BASE + "/api/autofarm/history?limit=48";
 
-// ── 차트 초기화 ──
-const chartOpts = (yMin, yMax, color) => ({
-  responsive: true,
-  animation: { duration: 400 },
-  plugins: { legend: { display: false }, tooltip: {
-    backgroundColor: '#1a2228',
-    borderColor: '#2a3540',
-    borderWidth: 1,
-    titleColor: '#8fa3ad',
-    bodyColor: '#cdd6da',
-    titleFont: { family: 'JetBrains Mono' },
-    bodyFont:  { family: 'JetBrains Mono' },
-  }},
-  scales: {
-    x: {
-      ticks: { color: '#3a4f58', maxTicksLimit: 8, font: { family: 'JetBrains Mono', size: 10 } },
-      grid:  { color: '#13191d' }
-    },
-    y: {
-      min: yMin, max: yMax,
-      ticks: { color: '#5a7080', font: { family: 'JetBrains Mono', size: 10 } },
-      grid:  { color: '#13191d' }
-    }
-  }
-});
+/* ══ 테마 ══ */
+let currentTheme = localStorage.getItem('af-theme') || 'dark';
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t === 'nature' ? 'nature' : '');
+  document.getElementById('themeBtn').textContent = t === 'nature' ? '🌙 다크모드' : '🌿 나무모드';
+  currentTheme = t;
+  localStorage.setItem('af-theme', t);
+  updateChartColors();
+}
+function toggleTheme() { applyTheme(currentTheme === 'nature' ? 'dark' : 'nature'); }
+applyTheme(currentTheme);
 
-const mkDataset = (color) => ({
-  data: [],
-  borderColor: color,
-  backgroundColor: color + '18',
-  tension: 0.35,
-  fill: true,
-  pointRadius: 2,
-  pointHoverRadius: 4,
-  borderWidth: 1.8
-});
+/* ══ 히스토리 토글 ══ */
+function toggleHist() {
+  const c = document.getElementById('hist-content');
+  const b = document.getElementById('hist-btn');
+  b.textContent = c.classList.toggle('open') ? '▼ HIDE' : '▶ SHOW';
+}
+
+/* ══ 유틸 ══ */
+function pctColor(pct) {
+  if (pct >= 60) return 'c-green';
+  if (pct >= 40) return 'c-yellow';
+  return 'c-red';
+}
+function barColor(pct) {
+  const s = getComputedStyle(document.documentElement);
+  if (pct >= 60) return s.getPropertyValue('--green').trim();
+  if (pct >= 40) return s.getPropertyValue('--yellow').trim();
+  return s.getPropertyValue('--red').trim();
+}
+function getCV(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function timeLabel(ts) { return ts ? ts.slice(-5) : '--'; }
+const wMap = { '맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓' };
+
+/* ══ 차트 ══ */
+function makeOpts(yMin, yMax, y2Min, y2Max) {
+  return {
+    responsive: true,
+    animation: { duration: 300 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a2228', borderColor: '#2a3540', borderWidth: 1,
+        titleColor: '#8fa3ad', bodyColor: '#cdd6da',
+        titleFont: { family: 'JetBrains Mono', size: 11 },
+        bodyFont:  { family: 'JetBrains Mono', size: 11 },
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: getCV('--chart-tick'), maxTicksLimit: 7, font: { family: 'JetBrains Mono', size: 10 } },
+        grid:  { color: getCV('--chart-grid') }
+      },
+      y: {
+        position: 'left', min: yMin, max: yMax,
+        ticks: { color: getCV('--chart-tick'), font: { family: 'JetBrains Mono', size: 10 } },
+        grid:  { color: getCV('--chart-grid') }
+      },
+      y2: {
+        position: 'right', min: y2Min, max: y2Max,
+        grid: { drawOnChartArea: false },
+        ticks: { color: getCV('--chart-tick'), font: { family: 'JetBrains Mono', size: 10 } }
+      }
+    }
+  };
+}
 
 const batChart = new Chart(document.getElementById("batChart"), {
   type: "line",
-  data: { labels: [], datasets: [mkDataset("var(--green, #3ddc84)")] },
-  options: chartOpts(3.3, 4.3, "#3ddc84")
+  data: {
+    labels: [],
+    datasets: [
+      { data: [], yAxisID: 'y',  borderColor: '#a0c4ff', backgroundColor: 'rgba(160,196,255,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2, label: 'V' },
+      { data: [], yAxisID: 'y2', borderColor: 'rgba(160,196,255,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3], label: '%' }
+    ]
+  },
+  options: makeOpts(3.3, 4.3, 0, 100)
 });
+
 const solChart = new Chart(document.getElementById("solChart"), {
   type: "line",
-  data: { labels: [], datasets: [mkDataset("var(--yellow, #f5c842)")] },
-  options: chartOpts(0, 100, "#f5c842")
+  data: {
+    labels: [],
+    datasets: [
+      { data: [], yAxisID: 'y',  borderColor: '#ffe066', backgroundColor: 'rgba(255,224,102,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2, label: 'V' },
+      { data: [], yAxisID: 'y2', borderColor: 'rgba(255,224,102,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3], label: '%' }
+    ]
+  },
+  options: makeOpts(0, 7, 0, 100)
 });
 
-// ── 유틸 ──
-function pctColor(pct) {
-  if (pct >= 60) return "c-green";
-  if (pct >= 40) return "c-yellow";
-  return "c-red";
+function updateChartColors() {
+  const isNature = currentTheme === 'nature';
+  [batChart, solChart].forEach(c => {
+    c.options.scales.x.ticks.color  = getCV('--chart-tick');
+    c.options.scales.x.grid.color   = getCV('--chart-grid');
+    c.options.scales.y.ticks.color  = getCV('--chart-tick');
+    c.options.scales.y.grid.color   = getCV('--chart-grid');
+    c.options.scales.y2.ticks.color = getCV('--chart-tick');
+    c.options.plugins.tooltip.backgroundColor = isNature ? '#fff8ee' : '#1a2228';
+    c.options.plugins.tooltip.titleColor = isNature ? '#6b5040' : '#8fa3ad';
+    c.options.plugins.tooltip.bodyColor  = isNature ? '#3b2e1e' : '#cdd6da';
+    c.update();
+  });
 }
 
-function barColor(pct) {
-  if (pct >= 60) return "#3ddc84";
-  if (pct >= 40) return "#f5c842";
-  return "#ff4f4f";
-}
-
-function badge(text, type) {
-  return `<span class="badge badge-${type}">${text}</span>`;
-}
-
-function pumpBadge(status) {
-  if (!status) return badge('--', 'off');
-  if (status.includes('완료')) return badge('완료 ✅', 'on');
-  if (status.includes('대기')) return badge('대기중', 'warn');
-  return badge('OFF', 'off');
-}
-
-function subBadge(status, active) {
-  if (active) return badge('ON', 'on');
-  if (status && status.includes('배터리')) return badge('배터리부족', 'warn');
-  if (status && status.includes('날씨'))   return badge('날씨불량', 'warn');
-  return badge('OFF', 'off');
-}
-
-function solBadge(status) {
-  if (!status || status === '정상') return badge('충전중', 'on');
-  if (status.includes('역류'))      return badge('역류', 'warn');
-  return badge('충전OFF', 'off');
-}
-
-function timeLabel(ts) {
-  if (!ts) return '--';
-  // "26.06.04 11:00" → "11:00"
-  return ts.slice(-5);
-}
-
-// ── 최신 데이터 렌더 ──
+/* ══ 렌더 ══ */
 function renderLatest(d) {
-  // 배터리
   const pct = d.battery_percent || 0;
+
+  // 배터리
   const vEl = document.getElementById("bat-v");
   vEl.textContent = (d.battery_v || '--') + 'V';
-  vEl.className   = "c-val " + pctColor(pct);
-  document.getElementById("bat-pct").textContent = pct + '% · ' + (d.battery_status || '');
-  document.getElementById("bat-pct-bar").textContent = pct + '%';
-  const fill = document.getElementById("bat-fill");
-  fill.style.width      = pct + '%';
-  fill.style.background = barColor(pct);
+  vEl.className = 'c-val ' + pctColor(pct);
+  document.getElementById("bat-pct-txt").textContent = pct + '% · ' + (d.battery_status || '').trim();
+  document.getElementById("bat-fill").style.width      = pct + '%';
+  document.getElementById("bat-fill").style.background = barColor(pct);
+
+  const bb = document.getElementById("bat-badge");
+  bb.textContent = (d.battery_status || '--').trim();
+  bb.className = 'c-badge ' + (pct >= 60 ? 'badge-on-sm' : pct >= 40 ? 'badge-warn-sm' : 'badge-off-sm');
 
   // 태양광
-  document.getElementById("sol-v").textContent   = (d.solar_v || 0) + 'V';
+  const sv = (d.solar_v != null) ? Number(d.solar_v).toFixed(2) : '0.00';
+  document.getElementById("sol-v").textContent  = sv + 'V';
   document.getElementById("sol-eff").textContent = '효율 ' + (d.solar_efficiency || 0) + '%';
 
+  const sb = document.getElementById("sol-badge");
+  const ss = d.solar_status || '';
+  if (ss === '정상' || ss === '') { sb.textContent = '충전중';  sb.className = 'c-badge badge-on-sm'; }
+  else if (ss.includes('역류'))   { sb.textContent = '역류';    sb.className = 'c-badge badge-warn-sm'; }
+  else                             { sb.textContent = '충전OFF'; sb.className = 'c-badge badge-off-sm'; }
+
+  // 워터펌프
+  const ps = d.pump_status || '';
+  const pumpEl = document.getElementById("pump-status");
+  if (ps.includes('완료'))      { pumpEl.textContent = '완료 ✅'; pumpEl.className = 'c-status-val c-green'; }
+  else if (ps.includes('대기')) { pumpEl.textContent = '대기중 ⏳'; pumpEl.className = 'c-status-val c-yellow'; }
+  else                          { pumpEl.textContent = 'OFF'; pumpEl.className = 'c-status-val c-dim'; }
+
+  // 코인채굴
+  const subEl = document.getElementById("sub-status");
+  const ss2 = d.sub_esp_status || '';
+  if (d.sub_esp_active)             { subEl.textContent = 'ON 🟢';    subEl.className = 'c-status-val c-green'; }
+  else if (ss2.includes('배터리')) { subEl.textContent = '배터리부족'; subEl.className = 'c-status-val c-yellow'; }
+  else if (ss2.includes('날씨'))   { subEl.textContent = '날씨불량';  subEl.className = 'c-status-val c-yellow'; }
+  else                              { subEl.textContent = 'OFF';       subEl.className = 'c-status-val c-dim'; }
+
   // 날씨
-  const wMap = { '맑음':'☀️', '구름많음':'⛅', '흐림':'☁️', '비':'🌧️', '비/눈':'🌨️', '눈':'❄️', '소나기':'🌦️' };
   document.getElementById("weather").textContent  = (wMap[d.weather] || '') + ' ' + (d.weather || '--');
-  document.getElementById("sun-time").textContent = '🌅' + (d.sunrise || '--') + '  🌇' + (d.sunset || '--');
+  document.getElementById("sun-time").textContent = '🌅 ' + (d.sunrise || '--') + '   🌇 ' + (d.sunset || '--');
 
   // 온타임
   document.getElementById("ontime").textContent = d.ontime || '--';
-
-  // 상태 배지
-  document.getElementById("pump-status").innerHTML = pumpBadge(d.pump_status);
-  document.getElementById("sub-status").innerHTML  = subBadge(d.sub_esp_status, d.sub_esp_active);
-  document.getElementById("sol-status").innerHTML  = solBadge(d.solar_status);
-
-  // 업데이트 시각
   document.getElementById("updated").textContent = '업데이트 ' + (d.timestamp || '--');
 }
 
-// ── 히스토리 렌더 ──
 function renderHistory(rows) {
-  // 차트용 (오래된 순)
   const rev = [...rows].reverse();
-  batChart.data.labels           = rev.map(r => timeLabel(r.timestamp));
+
+  batChart.data.labels = rev.map(r => timeLabel(r.timestamp));
   batChart.data.datasets[0].data = rev.map(r => r.battery_v);
+  batChart.data.datasets[1].data = rev.map(r => r.battery_percent);
   batChart.update();
 
-  solChart.data.labels           = rev.map(r => timeLabel(r.timestamp));
-  solChart.data.datasets[0].data = rev.map(r => r.solar_efficiency);
+  solChart.data.labels = rev.map(r => timeLabel(r.timestamp));
+  solChart.data.datasets[0].data = rev.map(r => r.solar_v != null ? r.solar_v : 0);
+  solChart.data.datasets[1].data = rev.map(r => r.solar_efficiency);
   solChart.update();
 
-  // 테이블 (최신 순, 최대 20행)
+  // 테이블 최근 3건
   const tbody = document.getElementById("hist-body");
-  const slice = rows.slice(0, 20);
+  const slice = rows.slice(0, 3);
   if (!slice.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="color:#3a4f58;text-align:center;padding:16px">데이터 없음</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">데이터 없음</td></tr>';
     return;
   }
   tbody.innerHTML = slice.map(r => {
-    const pct  = r.battery_percent || 0;
-    const col  = pct >= 60 ? '#3ddc84' : pct >= 40 ? '#f5c842' : '#ff4f4f';
-    const pump = r.pump_status || '--';
-    const sub  = r.sub_esp_active ? '<span style="color:#3ddc84">ON</span>' : '<span style="color:#3a4f58">OFF</span>';
+    const pct = r.battery_percent || 0;
+    const col = pct >= 60 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
+    const sv  = r.solar_v != null ? Number(r.solar_v).toFixed(2) : '0.00';
+    const pump = r.pump_status || '';
+    const pi   = pump.includes('완료') ? '✅' : pump.includes('대기') ? '⏳' : '⚫';
+    const si   = r.sub_esp_active
+      ? '<span style="color:var(--green)">ON</span>'
+      : '<span style="color:var(--text-dim)">OFF</span>';
     return `<tr>
       <td>${timeLabel(r.timestamp)}</td>
-      <td style="color:${col}">${r.battery_v}V <span style="color:#3a4f58">${pct}%</span></td>
-      <td>${r.solar_v}V <span style="color:#3a4f58">${r.solar_efficiency}%</span></td>
+      <td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td>
+      <td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td>
       <td>${r.weather || '--'}</td>
-      <td>${pump.includes('완료') ? '✅' : pump.includes('대기') ? '⏳' : '⚫'}</td>
-      <td>${sub}</td>
+      <td>${pi}</td>
+      <td>${si}</td>
     </tr>`;
   }).join('');
 }
 
-// ── fetch ──
+/* ══ fetch ══ */
 async function loadLatest() {
   try {
     const res = await fetch(API_LATEST);
     if (!res.ok) throw new Error(res.status);
-    const d = await res.json();
-    renderLatest(d);
+    renderLatest(await res.json());
     document.getElementById("err-banner").style.display = 'none';
   } catch(e) {
     console.error("latest 실패:", e);
     document.getElementById("err-banner").style.display = 'block';
   }
 }
-
 async function loadHistory() {
   try {
     const res = await fetch(API_HISTORY);
     if (!res.ok) throw new Error(res.status);
-    const rows = await res.json();
-    renderHistory(rows);
-  } catch(e) {
-    console.error("history 실패:", e);
-  }
+    renderHistory(await res.json());
+  } catch(e) { console.error("history 실패:", e); }
 }
-
-async function refresh() {
-  await loadLatest();
-  await loadHistory();
-}
+async function refresh() { await loadLatest(); await loadHistory(); }
 
 refresh();
 setInterval(refresh, 60 * 1000);
