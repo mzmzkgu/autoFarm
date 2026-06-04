@@ -7,224 +7,61 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:         #0a0d0f;
-  --bg2:        #111518;
-  --bg3:        #181d21;
-  --border:     #1f2a2f;
-  --green:      #3ddc84;
-  --green-dim:  #1a4d33;
-  --yellow:     #f5c842;
-  --red:        #ff4f4f;
-  --text:       #cdd6da;
-  --text-dim:   #5a6a72;
-  --text-mid:   #8fa3ad;
-  --chart-grid: #1e2830;
-  --chart-tick: #4a6070;
+  --bg:#0a0d0f;--bg2:#111518;--bg3:#181d21;--border:#1f2a2f;
+  --green:#3ddc84;--green-dim:#1a4d33;--yellow:#f5c842;--red:#ff4f4f;
+  --text:#cdd6da;--text-dim:#5a6a72;--text-mid:#8fa3ad;
+  --chart-grid:#1e2830;--chart-tick:#4a6070;
 }
 [data-theme="nature"] {
-  --bg:         #f5f0e8;
-  --bg2:        #fffdf7;
-  --bg3:        #ede8dc;
-  --border:     #c8b89a;
-  --green:      #3a7d44;
-  --green-dim:  #c8e6c9;
-  --yellow:     #e6a817;
-  --red:        #c0392b;
-  --text:       #3b2e1e;
-  --text-dim:   #a08060;
-  --text-mid:   #6b5040;
-  --chart-grid: #ddd4c0;
-  --chart-tick: #a08060;
+  --bg:#f5f0e8;--bg2:#fffdf7;--bg3:#ede8dc;--border:#c8b89a;
+  --green:#3a7d44;--green-dim:#c8e6c9;--yellow:#e6a817;--red:#c0392b;
+  --text:#3b2e1e;--text-dim:#a08060;--text-mid:#6b5040;
+  --chart-grid:#ddd4c0;--chart-tick:#a08060;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 20px 14px 48px;
-  transition: background 0.3s, color 0.3s;
-}
-header {
-  max-width: 720px;
-  margin: 0 auto 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-header h1 {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--green);
-  letter-spacing: 0.04em;
-}
-header h1 span { color: var(--text-dim); font-weight: 400; }
-.header-right { display: flex; align-items: center; gap: 10px; }
-#updated {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-dim);
-}
-.theme-btn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.72rem;
-  color: var(--text-mid);
-  cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.theme-btn:hover { border-color: var(--green); color: var(--green); }
-.wrap { max-width: 720px; margin: 0 auto; }
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 14px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  transition: background 0.3s, border 0.3s;
-}
-.c-label {
-  font-size: 0.65rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-family: 'JetBrains Mono', monospace;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.c-badge {
-  font-size: 0.62rem;
-  padding: 1px 7px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0;
-}
-.badge-on-sm   { background: var(--green-dim); color: var(--green); }
-.badge-off-sm  { background: var(--bg3); color: var(--text-dim); }
-.badge-warn-sm { background: #3a2e00; color: var(--yellow); }
-[data-theme="nature"] .badge-warn-sm { background: #fff3cd; color: #856404; }
-.c-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.1;
-  margin-top: 2px;
-}
-.c-sub { font-size: 0.72rem; color: var(--text-mid); }
-.mini-bar-wrap { margin-top: 6px; }
-.mini-bar-track {
-  height: 6px;
-  background: var(--bg3);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.mini-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.6s ease, background 0.4s;
-  width: 0%;
-}
-.c-green  { color: var(--green)  !important; }
-.c-yellow { color: var(--yellow) !important; }
-.c-red    { color: var(--red)    !important; }
-.c-dim    { color: var(--text-dim) !important; }
-.c-status { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
-.c-status-icon { font-size: 1.1rem; }
-.c-status-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-mid);
-}
-.err-banner {
-  background: #2a0f0f;
-  border: 1px solid #5a1a1a;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 0.75rem;
-  color: var(--red);
-  margin-bottom: 10px;
-  display: none;
-  font-family: 'JetBrains Mono', monospace;
-}
-[data-theme="nature"] .err-banner { background: #fdecea; border-color: #f5c6cb; }
-.chart-block {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 10px;
-  transition: background 0.3s, border 0.3s;
-}
-.chart-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
-}
-canvas { width: 100% !important; }
-.hist-block {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  transition: background 0.3s, border 0.3s;
-}
-.hist-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-}
-.hist-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.hist-toggle {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-dim);
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 2px 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.hist-toggle:hover { color: var(--green); border-color: var(--green); }
-.hist-content { display: none; margin-top: 12px; overflow-x: auto; }
-.hist-content.open { display: block; }
-table { width: 100%; border-collapse: collapse; font-size: 0.73rem; font-family: 'JetBrains Mono', monospace; }
-th { color: var(--text-dim); font-weight: 400; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-td { color: var(--text-mid); padding: 5px 6px; border-bottom: 1px solid var(--bg3); white-space: nowrap; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--bg3); }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px 14px 48px;transition:background .3s,color .3s}
+header{max-width:720px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;flex-wrap:wrap;gap:8px}
+header h1{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--green);letter-spacing:.04em}
+header h1 span{color:var(--text-dim);font-weight:400}
+.header-right{display:flex;align-items:center;gap:10px}
+#updated{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim)}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.72rem;color:var(--text-mid);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;white-space:nowrap}
+.theme-btn:hover{border-color:var(--green);color:var(--green)}
+.wrap{max-width:720px;margin:0 auto}
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:3px;transition:background .3s,border .3s}
+.c-label{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;align-items:center}
+.c-badge{font-size:.62rem;padding:1px 7px;border-radius:10px;font-weight:600;text-transform:none;letter-spacing:0}
+.badge-on-sm{background:var(--green-dim);color:var(--green)}
+.badge-off-sm{background:var(--bg3);color:var(--text-dim)}
+.badge-warn-sm{background:#3a2e00;color:var(--yellow)}
+[data-theme="nature"] .badge-warn-sm{background:#fff3cd;color:#856404}
+.c-val{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.1;margin-top:2px}
+.c-sub{font-size:.72rem;color:var(--text-mid)}
+.mini-bar-wrap{margin-top:6px}
+.mini-bar-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.mini-bar-fill{height:100%;border-radius:3px;transition:width .6s ease,background .4s;width:0%}
+.c-green{color:var(--green)!important}.c-yellow{color:var(--yellow)!important}.c-red{color:var(--red)!important}.c-dim{color:var(--text-dim)!important}
+.c-status{margin-top:6px;display:flex;align-items:center;gap:6px}
+.c-status-icon{font-size:1.1rem}
+.c-status-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--text-mid)}
+.err-banner{background:#2a0f0f;border:1px solid #5a1a1a;border-radius:8px;padding:8px 14px;font-size:.75rem;color:var(--red);margin-bottom:10px;display:none;font-family:'JetBrains Mono',monospace}
+[data-theme="nature"] .err-banner{background:#fdecea;border-color:#f5c6cb}
+.chart-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;transition:background .3s,border .3s}
+.chart-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+canvas{width:100%!important}
+.hist-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;transition:background .3s,border .3s}
+.hist-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.hist-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
+.hist-toggle{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 10px;cursor:pointer;transition:all .2s}
+.hist-toggle:hover{color:var(--green);border-color:var(--green)}
+.hist-content{display:none;margin-top:12px;overflow-x:auto}
+.hist-content.open{display:block}
+table{width:100%;border-collapse:collapse;font-size:.73rem;font-family:'JetBrains Mono',monospace}
+th{color:var(--text-dim);font-weight:400;text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{color:var(--text-mid);padding:5px 6px;border-bottom:1px solid var(--bg3);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
 </style>
 </head>
 <body>
@@ -236,17 +73,13 @@ tr:hover td { background: var(--bg3); }
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌿 나무모드</button>
     </div>
   </header>
-
   <div class="err-banner" id="err-banner">⚠ 서버 연결 실패 — 잠시 후 재시도합니다</div>
-
   <div class="main-grid">
     <div class="card">
       <div class="c-label">Battery <span class="c-badge badge-off-sm" id="bat-badge">--</span></div>
       <div class="c-val" id="bat-v">--</div>
       <div class="c-sub" id="bat-pct-txt">-- %</div>
-      <div class="mini-bar-wrap">
-        <div class="mini-bar-track"><div class="mini-bar-fill" id="bat-fill"></div></div>
-      </div>
+      <div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill" id="bat-fill"></div></div></div>
     </div>
     <div class="card">
       <div class="c-label">Solar <span class="c-badge badge-off-sm" id="sol-badge">--</span></div>
@@ -255,22 +88,15 @@ tr:hover td { background: var(--bg3); }
     </div>
     <div class="card">
       <div class="c-label">워터펌프</div>
-      <div class="c-status">
-        <span class="c-status-icon">💧</span>
-        <span class="c-status-val" id="pump-status">--</span>
-      </div>
+      <div class="c-status"><span class="c-status-icon">💧</span><span class="c-status-val" id="pump-status">--</span></div>
       <div class="c-sub" style="margin-top:4px">10:45 ~ 11:30</div>
     </div>
     <div class="card">
       <div class="c-label">코인채굴</div>
-      <div class="c-status">
-        <span class="c-status-icon">⛏️</span>
-        <span class="c-status-val" id="sub-status">--</span>
-      </div>
+      <div class="c-status"><span class="c-status-icon">⛏️</span><span class="c-status-val" id="sub-status">--</span></div>
       <div class="c-sub" style="margin-top:4px">12:45 ~ 16:00</div>
     </div>
   </div>
-
   <div class="main-grid" style="margin-bottom:10px">
     <div class="card">
       <div class="c-label">Weather</div>
@@ -282,7 +108,6 @@ tr:hover td { background: var(--bg3); }
       <div class="c-val" id="ontime" style="font-size:0.95rem;margin-top:6px">--</div>
     </div>
   </div>
-
   <div class="chart-block">
     <div class="chart-title">📈 Battery Voltage — 최근 24h</div>
     <canvas id="batChart" height="110"></canvas>
@@ -291,7 +116,6 @@ tr:hover td { background: var(--bg3); }
     <div class="chart-title">☀️ Solar Efficiency — 최근 24h</div>
     <canvas id="solChart" height="110"></canvas>
   </div>
-
   <div class="hist-block">
     <div class="hist-header" onclick="toggleHist()">
       <div class="hist-title">📋 History</div>
@@ -300,9 +124,7 @@ tr:hover td { background: var(--bg3); }
     <div class="hist-content" id="hist-content">
       <table>
         <thead><tr><th>시각</th><th>배터리</th><th>태양광</th><th>날씨</th><th>펌프</th><th>채굴</th></tr></thead>
-        <tbody id="hist-body">
-          <tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">로딩 중...</td></tr>
-        </tbody>
+        <tbody id="hist-body"><tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">로딩 중...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -314,213 +136,168 @@ const API_BASE    = "https://kgu3405.tplinkdns.com";
 const API_LATEST  = API_BASE + "/api/autofarm/latest";
 const API_HISTORY = API_BASE + "/api/autofarm/history?limit=48";
 
-/* ══ 테마 ══ */
-let currentTheme = localStorage.getItem('af-theme') || 'dark';
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t === 'nature' ? 'nature' : '');
-  document.getElementById('themeBtn').textContent = t === 'nature' ? '🌙 다크모드' : '🌿 나무모드';
-  currentTheme = t;
-  localStorage.setItem('af-theme', t);
-  updateChartColors();
-}
-function toggleTheme() { applyTheme(currentTheme === 'nature' ? 'dark' : 'nature'); }
-applyTheme(currentTheme);
+function getCV(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function timeLabel(ts){return ts?ts.slice(-5):'--'}
+const wMap={'맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓'};
 
-function toggleHist() {
-  const c = document.getElementById('hist-content');
-  const b = document.getElementById('hist-btn');
-  b.textContent = c.classList.toggle('open') ? '▼ HIDE' : '▶ SHOW';
+function pctColor(p){return p>=60?'c-green':p>=40?'c-yellow':'c-red'}
+function barColor(p){
+  const s=getComputedStyle(document.documentElement);
+  return p>=60?s.getPropertyValue('--green').trim():p>=40?s.getPropertyValue('--yellow').trim():s.getPropertyValue('--red').trim();
 }
 
-function pctColor(pct) {
-  if (pct >= 60) return 'c-green';
-  if (pct >= 40) return 'c-yellow';
-  return 'c-red';
-}
-function barColor(pct) {
-  const s = getComputedStyle(document.documentElement);
-  if (pct >= 60) return s.getPropertyValue('--green').trim();
-  if (pct >= 40) return s.getPropertyValue('--yellow').trim();
-  return s.getPropertyValue('--red').trim();
-}
-function getCV(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
-function timeLabel(ts) { return ts ? ts.slice(-5) : '--'; }
-const wMap = {'맑음':'☀️','구름많음':'⛅','흐림':'☁️','비':'🌧️','비/눈':'🌨️','눈':'❄️','소나기':'🌦️','알수없음':'❓'};
-
-/* ══ 차트 ══ */
-function makeOpts(yMin, yMax, y2Min, y2Max) {
-  return {
-    responsive: true,
-    animation: { duration: 300 },
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#1a2228', borderColor: '#2a3540', borderWidth: 1,
-        titleColor: '#8fa3ad', bodyColor: '#cdd6da',
-        titleFont: { family: 'JetBrains Mono', size: 11 },
-        bodyFont:  { family: 'JetBrains Mono', size: 11 },
-      }
-    },
-    scales: {
-      x: {
-        ticks: { color: getCV('--chart-tick'), maxTicksLimit: 7, font: { family: 'JetBrains Mono', size: 10 } },
-        grid:  { color: getCV('--chart-grid') }
-      },
-      y: {
-        position: 'left', min: yMin, max: yMax,
-        ticks: { color: getCV('--chart-tick'), font: { family: 'JetBrains Mono', size: 10 } },
-        grid:  { color: getCV('--chart-grid') }
-      },
-      y2: {
-        position: 'right', min: y2Min, max: y2Max,
-        grid: { drawOnChartArea: false },
-        ticks: { color: getCV('--chart-tick'), font: { family: 'JetBrains Mono', size: 10 } }
-      }
+/* ══ 차트 — 먼저 초기화 ══ */
+function makeOpts(yMin,yMax,y2Min,y2Max){
+  return{
+    responsive:true,animation:{duration:300},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a2228',borderColor:'#2a3540',borderWidth:1,titleColor:'#8fa3ad',bodyColor:'#cdd6da',titleFont:{family:'JetBrains Mono',size:11},bodyFont:{family:'JetBrains Mono',size:11}}},
+    scales:{
+      x:{ticks:{color:getCV('--chart-tick'),maxTicksLimit:7,font:{family:'JetBrains Mono',size:10}},grid:{color:getCV('--chart-grid')}},
+      y:{position:'left',min:yMin,max:yMax,ticks:{color:getCV('--chart-tick'),font:{family:'JetBrains Mono',size:10}},grid:{color:getCV('--chart-grid')}},
+      y2:{position:'right',min:y2Min,max:y2Max,grid:{drawOnChartArea:false},ticks:{color:getCV('--chart-tick'),font:{family:'JetBrains Mono',size:10}}}
     }
   };
 }
 
-const batChart = new Chart(document.getElementById("batChart"), {
-  type: "line",
-  data: { labels: [], datasets: [
-    { data: [], yAxisID: 'y',  borderColor: '#a0c4ff', backgroundColor: 'rgba(160,196,255,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2 },
-    { data: [], yAxisID: 'y2', borderColor: 'rgba(160,196,255,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3] }
+const batChart=new Chart(document.getElementById("batChart"),{
+  type:"line",
+  data:{labels:[],datasets:[
+    {data:[],yAxisID:'y', borderColor:'#a0c4ff',backgroundColor:'rgba(160,196,255,0.12)',tension:.35,fill:true, pointRadius:2,borderWidth:2},
+    {data:[],yAxisID:'y2',borderColor:'rgba(160,196,255,0.35)',backgroundColor:'transparent',tension:.35,fill:false,pointRadius:0,borderWidth:1,borderDash:[4,3]}
   ]},
-  options: makeOpts(3.3, 4.3, 0, 100)
+  options:makeOpts(3.3,4.3,0,100)
 });
 
-const solChart = new Chart(document.getElementById("solChart"), {
-  type: "line",
-  data: { labels: [], datasets: [
-    { data: [], yAxisID: 'y',  borderColor: '#ffe066', backgroundColor: 'rgba(255,224,102,0.12)', tension: 0.35, fill: true,  pointRadius: 2, borderWidth: 2 },
-    { data: [], yAxisID: 'y2', borderColor: 'rgba(255,224,102,0.35)', backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 0, borderWidth: 1, borderDash: [4,3] }
+const solChart=new Chart(document.getElementById("solChart"),{
+  type:"line",
+  data:{labels:[],datasets:[
+    {data:[],yAxisID:'y', borderColor:'#ffe066',backgroundColor:'rgba(255,224,102,0.12)',tension:.35,fill:true, pointRadius:2,borderWidth:2},
+    {data:[],yAxisID:'y2',borderColor:'rgba(255,224,102,0.35)',backgroundColor:'transparent',tension:.35,fill:false,pointRadius:0,borderWidth:1,borderDash:[4,3]}
   ]},
-  options: makeOpts(0, 7, 0, 100)
+  options:makeOpts(0,7,0,100)
 });
 
-function updateChartColors() {
-  const isN = currentTheme === 'nature';
-  [batChart, solChart].forEach(c => {
-    c.options.scales.x.ticks.color  = getCV('--chart-tick');
-    c.options.scales.x.grid.color   = getCV('--chart-grid');
-    c.options.scales.y.ticks.color  = getCV('--chart-tick');
-    c.options.scales.y.grid.color   = getCV('--chart-grid');
-    c.options.scales.y2.ticks.color = getCV('--chart-tick');
-    c.options.plugins.tooltip.backgroundColor = isN ? '#fff8ee' : '#1a2228';
-    c.options.plugins.tooltip.titleColor = isN ? '#6b5040' : '#8fa3ad';
-    c.options.plugins.tooltip.bodyColor  = isN ? '#3b2e1e' : '#cdd6da';
+/* ══ 테마 — 차트 초기화 이후에 호출 ══ */
+let currentTheme=localStorage.getItem('af-theme')||'dark';
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t==='nature'?'nature':'');
+  document.getElementById('themeBtn').textContent=t==='nature'?'🌙 다크모드':'🌿 나무모드';
+  currentTheme=t;
+  localStorage.setItem('af-theme',t);
+  const isN=t==='nature';
+  [batChart,solChart].forEach(c=>{
+    c.options.scales.x.ticks.color =getCV('--chart-tick');
+    c.options.scales.x.grid.color  =getCV('--chart-grid');
+    c.options.scales.y.ticks.color =getCV('--chart-tick');
+    c.options.scales.y.grid.color  =getCV('--chart-grid');
+    c.options.scales.y2.ticks.color=getCV('--chart-tick');
+    c.options.plugins.tooltip.backgroundColor=isN?'#fff8ee':'#1a2228';
+    c.options.plugins.tooltip.titleColor=isN?'#6b5040':'#8fa3ad';
+    c.options.plugins.tooltip.bodyColor =isN?'#3b2e1e':'#cdd6da';
     c.update();
   });
 }
+function toggleTheme(){applyTheme(currentTheme==='nature'?'dark':'nature')}
+applyTheme(currentTheme); // ← 차트 생성 이후 호출
 
-/* ══ 렌더 ══ */
-function renderLatest(d) {
-  const pct = d.battery_percent || 0;
-
-  const vEl = document.getElementById("bat-v");
-  vEl.textContent = (d.battery_v != null ? d.battery_v : '--') + 'V';
-  vEl.className = 'c-val ' + pctColor(pct);
-  document.getElementById("bat-pct-txt").textContent = pct + '% · ' + (d.battery_status || '').trim();
-  document.getElementById("bat-fill").style.width      = pct + '%';
-  document.getElementById("bat-fill").style.background = barColor(pct);
-  const bb = document.getElementById("bat-badge");
-  bb.textContent = (d.battery_status || '--').trim();
-  bb.className = 'c-badge ' + (pct >= 60 ? 'badge-on-sm' : pct >= 40 ? 'badge-warn-sm' : 'badge-off-sm');
-
-  const sv = d.solar_v != null ? Number(d.solar_v).toFixed(2) : '0.00';
-  document.getElementById("sol-v").textContent   = sv + 'V';
-  document.getElementById("sol-eff").textContent = '효율 ' + (d.solar_efficiency || 0) + '%';
-  const sb = document.getElementById("sol-badge");
-  const ss = (d.solar_status || '').trim();
-  if (ss === '정상' || ss === '')  { sb.textContent = '충전중';  sb.className = 'c-badge badge-on-sm'; }
-  else if (ss.includes('역류'))    { sb.textContent = '역류';    sb.className = 'c-badge badge-warn-sm'; }
-  else                              { sb.textContent = '충전OFF'; sb.className = 'c-badge badge-off-sm'; }
-
-  const ps = d.pump_status || '';
-  const pumpEl = document.getElementById("pump-status");
-  if (ps.includes('완료'))      { pumpEl.textContent = '완료 ✅'; pumpEl.className = 'c-status-val c-green'; }
-  else if (ps.includes('대기')) { pumpEl.textContent = '대기중 ⏳'; pumpEl.className = 'c-status-val c-yellow'; }
-  else                          { pumpEl.textContent = 'OFF';       pumpEl.className = 'c-status-val c-dim'; }
-
-  const subEl = document.getElementById("sub-status");
-  const ss2 = d.sub_esp_status || '';
-  if (d.sub_esp_active)            { subEl.textContent = 'ON 🟢';     subEl.className = 'c-status-val c-green'; }
-  else if (ss2.includes('배터리')){ subEl.textContent = '배터리부족'; subEl.className = 'c-status-val c-yellow'; }
-  else if (ss2.includes('날씨'))  { subEl.textContent = '날씨불량';   subEl.className = 'c-status-val c-yellow'; }
-  else                             { subEl.textContent = 'OFF';        subEl.className = 'c-status-val c-dim'; }
-
-  document.getElementById("weather").textContent  = (wMap[d.weather] || '') + ' ' + (d.weather || '--');
-  document.getElementById("sun-time").textContent = '🌅 ' + (d.sunrise || '--') + '   🌇 ' + (d.sunset || '--');
-  document.getElementById("ontime").textContent   = d.ontime || '--';
-  document.getElementById("updated").textContent  = '업데이트 ' + (d.timestamp || '--');
-  document.getElementById("err-banner").style.display = 'none';
+function toggleHist(){
+  const c=document.getElementById('hist-content');
+  const b=document.getElementById('hist-btn');
+  b.textContent=c.classList.toggle('open')?'▼ HIDE':'▶ SHOW';
 }
 
-function renderHistory(rows) {
-  const rev = [...rows].reverse();
-  batChart.data.labels = rev.map(r => timeLabel(r.timestamp));
-  batChart.data.datasets[0].data = rev.map(r => r.battery_v);
-  batChart.data.datasets[1].data = rev.map(r => r.battery_percent);
-  batChart.update();
+/* ══ 렌더 ══ */
+function renderLatest(d){
+  const pct=d.battery_percent||0;
+  const vEl=document.getElementById("bat-v");
+  vEl.textContent=(d.battery_v!=null?d.battery_v:'--')+'V';
+  vEl.className='c-val '+pctColor(pct);
+  document.getElementById("bat-pct-txt").textContent=pct+'% · '+(d.battery_status||'').trim();
+  document.getElementById("bat-fill").style.width=pct+'%';
+  document.getElementById("bat-fill").style.background=barColor(pct);
+  const bb=document.getElementById("bat-badge");
+  bb.textContent=(d.battery_status||'--').trim();
+  bb.className='c-badge '+(pct>=60?'badge-on-sm':pct>=40?'badge-warn-sm':'badge-off-sm');
 
-  solChart.data.labels = rev.map(r => timeLabel(r.timestamp));
-  solChart.data.datasets[0].data = rev.map(r => r.solar_v != null ? r.solar_v : 0);
-  solChart.data.datasets[1].data = rev.map(r => r.solar_efficiency);
+  const sv=d.solar_v!=null?Number(d.solar_v).toFixed(2):'0.00';
+  document.getElementById("sol-v").textContent=sv+'V';
+  document.getElementById("sol-eff").textContent='효율 '+(d.solar_efficiency||0)+'%';
+  const sb=document.getElementById("sol-badge");
+  const ss=(d.solar_status||'').trim();
+  if(ss==='정상'||ss===''){sb.textContent='충전중'; sb.className='c-badge badge-on-sm';}
+  else if(ss.includes('역류')){sb.textContent='역류'; sb.className='c-badge badge-warn-sm';}
+  else{sb.textContent='충전OFF'; sb.className='c-badge badge-off-sm';}
+
+  const ps=d.pump_status||'';
+  const pEl=document.getElementById("pump-status");
+  if(ps.includes('완료')){pEl.textContent='완료 ✅';pEl.className='c-status-val c-green';}
+  else if(ps.includes('대기')){pEl.textContent='대기중 ⏳';pEl.className='c-status-val c-yellow';}
+  else{pEl.textContent='OFF';pEl.className='c-status-val c-dim';}
+
+  const sEl=document.getElementById("sub-status");
+  const ss2=d.sub_esp_status||'';
+  if(d.sub_esp_active){sEl.textContent='ON 🟢';sEl.className='c-status-val c-green';}
+  else if(ss2.includes('배터리')){sEl.textContent='배터리부족';sEl.className='c-status-val c-yellow';}
+  else if(ss2.includes('날씨')){sEl.textContent='날씨불량';sEl.className='c-status-val c-yellow';}
+  else{sEl.textContent='OFF';sEl.className='c-status-val c-dim';}
+
+  document.getElementById("weather").textContent=(wMap[d.weather]||'')+' '+(d.weather||'--');
+  document.getElementById("sun-time").textContent='🌅 '+(d.sunrise||'--')+'   🌇 '+(d.sunset||'--');
+  document.getElementById("ontime").textContent=d.ontime||'--';
+  document.getElementById("updated").textContent='업데이트 '+(d.timestamp||'--');
+  document.getElementById("err-banner").style.display='none';
+}
+
+function renderHistory(rows){
+  const rev=[...rows].reverse();
+  batChart.data.labels=rev.map(r=>timeLabel(r.timestamp));
+  batChart.data.datasets[0].data=rev.map(r=>r.battery_v);
+  batChart.data.datasets[1].data=rev.map(r=>r.battery_percent);
+  batChart.update();
+  solChart.data.labels=rev.map(r=>timeLabel(r.timestamp));
+  solChart.data.datasets[0].data=rev.map(r=>r.solar_v!=null?r.solar_v:0);
+  solChart.data.datasets[1].data=rev.map(r=>r.solar_efficiency);
   solChart.update();
 
-  const tbody = document.getElementById("hist-body");
-  const slice = rows.slice(0, 3);
-  if (!slice.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">데이터 없음</td></tr>';
-    return;
-  }
-  tbody.innerHTML = slice.map(r => {
-    const pct = r.battery_percent || 0;
-    const col = pct >= 60 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
-    const sv  = r.solar_v != null ? Number(r.solar_v).toFixed(2) : '0.00';
-    const pi  = (r.pump_status||'').includes('완료') ? '✅' : (r.pump_status||'').includes('대기') ? '⏳' : '⚫';
-    const si  = r.sub_esp_active
-      ? '<span style="color:var(--green)">ON</span>'
-      : '<span style="color:var(--text-dim)">OFF</span>';
-    return `<tr>
-      <td>${timeLabel(r.timestamp)}</td>
-      <td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td>
-      <td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td>
-      <td>${r.weather||'--'}</td>
-      <td>${pi}</td><td>${si}</td>
-    </tr>`;
+  const tbody=document.getElementById("hist-body");
+  const slice=rows.slice(0,3);
+  if(!slice.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:12px;color:var(--text-dim)">데이터 없음</td></tr>';return;}
+  tbody.innerHTML=slice.map(r=>{
+    const pct=r.battery_percent||0;
+    const col=pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
+    const sv=r.solar_v!=null?Number(r.solar_v).toFixed(2):'0.00';
+    const pi=(r.pump_status||'').includes('완료')?'✅':(r.pump_status||'').includes('대기')?'⏳':'⚫';
+    const si=r.sub_esp_active?'<span style="color:var(--green)">ON</span>':'<span style="color:var(--text-dim)">OFF</span>';
+    return`<tr><td>${timeLabel(r.timestamp)}</td><td style="color:${col}">${r.battery_v}V <span style="color:var(--text-dim)">${pct}%</span></td><td>${sv}V <span style="color:var(--text-dim)">${r.solar_efficiency}%</span></td><td>${r.weather||'--'}</td><td>${pi}</td><td>${si}</td></tr>`;
   }).join('');
 }
 
-/* ══ fetch — 404 포함 모든 응답 처리 ══ */
-async function loadLatest() {
-  try {
-    const res = await fetch(API_LATEST);
-    const data = await res.json();
-    if (!res.ok) {
-      // 404 = 데이터 없음, 에러 배너 표시하지 않음
-      document.getElementById("updated").textContent = '데이터 없음 — ESP32 대기 중';
+/* ══ fetch ══ */
+async function loadLatest(){
+  try{
+    const res=await fetch(API_LATEST);
+    const data=await res.json();
+    if(!res.ok){
+      document.getElementById("updated").textContent='데이터 없음 — ESP32 대기 중';
       return;
     }
     renderLatest(data);
-  } catch(e) {
-    console.error("latest 실패:", e);
-    document.getElementById("updated").textContent = '서버 연결 실패';
-    document.getElementById("err-banner").style.display = 'block';
+  }catch(e){
+    console.error("latest 실패:",e);
+    document.getElementById("updated").textContent='서버 연결 실패';
+    document.getElementById("err-banner").style.display='block';
   }
 }
-
-async function loadHistory() {
-  try {
-    const res = await fetch(API_HISTORY);
-    if (!res.ok) return;
+async function loadHistory(){
+  try{
+    const res=await fetch(API_HISTORY);
+    if(!res.ok)return;
     renderHistory(await res.json());
-  } catch(e) { console.error("history 실패:", e); }
+  }catch(e){console.error("history 실패:",e);}
 }
-
-async function refresh() { await loadLatest(); await loadHistory(); }
+async function refresh(){await loadLatest();await loadHistory();}
 refresh();
-setInterval(refresh, 60 * 1000);
+setInterval(refresh,60*1000);
 </script>
 </body>
 </html>
